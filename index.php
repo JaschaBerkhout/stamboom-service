@@ -17,7 +17,7 @@ $first = $persons[0];
 $last = $persons[count($persons)-1];
 
 
-function getPersonsPerUser ($userId){
+function getPersonsPerUser($userId){
     global $persons;
     return $persons;
 }
@@ -33,3 +33,23 @@ $first_person = $get_persons_per_user[0];
 
 echo "\n";
 echo $first_person['birthdate'];
+
+
+// meer functies
+
+// objecten
+
+// classes
+
+// functies in objecten en class instantiatie
+
+// constructor
+
+// scope
+
+// database
+
+
+// Requests GET
+// JSON
+// requests POST
