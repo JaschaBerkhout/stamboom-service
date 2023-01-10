@@ -62,3 +62,5 @@ drop table persons;
 
 ALTER TABLE relations_types
 RENAME TO relation_types;
+
+

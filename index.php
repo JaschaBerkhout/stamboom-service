@@ -8,30 +8,13 @@ if ($pdo != null)
 else
     echo 'Whoops, could not connect to the SQLite database!';
 
-    $stmt = $pdo->query("SELECT * FROM persons");
-while ($row = $stmt->fetch()) {
-    print_r($row);
-}
+//     $stmt = $pdo->query("SELECT * FROM persons");
+// while ($row = $stmt->fetch()) {
+//     print_r($row);
+// }
 
-$person1 = [
-    "name" => "Jascha",
-    "birthdate" => "16-02-1995"
-];
-
-$person2 = [
-    "name" => "Daan",
-    "birthdate" => "11-09-1992"
-];
-
-$person_object = new stdclass();
-$person_object->name = "Dunja"; 
-
-print_r($person_object);
 
 $persons = [$person1, $person2];
-
-$first = $persons[0];
-$last = $persons[count($persons)-1];
 
 
 function getPersonsPerUser($userId){
@@ -42,14 +25,37 @@ $get_persons_per_user = getPersonsPerUser(1);
 
 $first_person = $get_persons_per_user[0];
 
-// print_r(getPersonsPerUser(1));
-// echo "<hr>";
-// var_dump(getPersonsPerUser(1));
-
-// echo $first_person['birthdate'];
-
 
 // meer functies
+
+//query user toevoegen
+$data = [
+    'user_name' => $user_name,
+    'password' => $password,
+];
+$sql = "INSERT INTO persons (user_name, password) VALUES (:user_name, :password)";
+$stmt= $pdo->prepare($sql);
+$stmt->execute($data);
+
+//query persoon toevoegen
+$data = [
+    'f_name' => $f_name,
+    'l_name' => $l_name,    
+    'gender' => $gender,
+    'birthday' => $birthday,
+    'user_id' => $user_id,
+];
+$sql = "INSERT INTO persons (f_name, l_name, gender,birthday, user_id) VALUES (:f_name, :l_name, :gender,:birthday, :user_id)";
+$stmt= $pdo->prepare($sql);
+$stmt->execute($data);
+
+//query persoon verwijderen
+$data = [
+    'id' => $id,
+];
+$sql = "DELETE FROM persons (id) VALUES (:id)";
+$stmt= $pdo->prepare($sql);
+$stmt->execute($data);
 
 // objecten
 
@@ -67,3 +73,4 @@ $first_person = $get_persons_per_user[0];
 // Requests GET
 // JSON
 // requests POST
+
