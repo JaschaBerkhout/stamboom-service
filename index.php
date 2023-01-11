@@ -2,14 +2,15 @@
 require 'vendor/autoload.php';
 use App\SQLiteConnection;
 
-function visualizePersonsPerUser($persons, $userId) {
+$db = new PersonsDatabase();
+
+function visualizePersonsPerUser($persons, $user_id) {
     echo "<br>Personen lijst: <hr>";
     echo "<pre>";
     print_r($persons);
     echo "</pre>";
 }
 
-$db = new PersonsDatabase();
 $db->insertUser('henkie', 'xxhorses123');
 
 $person = [
@@ -20,15 +21,15 @@ $person = [
     "user_id"=>1,
 ];
 
+$persons = $db->getPersonsPerUser(1);
 // @todo: bedenk een tweede class om te gebruiken in deze file. > 
 
-$first_person = $get_persons_per_user[0];
+$first_person = $persons[0];
 
 visualizePersonsPerUser($persons, 1);
-$dp->removePerson($person['id']);
+$db->removePerson(25);
 
-$persons = $dp->getPersonsPerUser(1);
-$dp->insertPerson($person);
+$db->insertPerson($person);
 
 // objecten
 
@@ -48,8 +49,7 @@ class PersonsDatabase {
     }
 
     //query user toevoegen
-    public function insertUser($user_name, $password)
-    {
+    public function insertUser($user_name, $password){
         $data = [
             'user_name' => $user_name,
             'password' => $password,
@@ -58,10 +58,9 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-// @todo: deze functies werken nu niet, die moeten nog verplaatst worden!!
     
     //query persoon toevoegen
-    function insertPerson($pdo, $person)
+    public function insertPerson($person)
     {
         $data = [
             'f_name' => $person['f_name'],
@@ -72,23 +71,23 @@ class PersonsDatabase {
         ];
 
         $sql = "INSERT INTO persons (f_name, l_name, gender,birthday, user_id) VALUES (:f_name, :l_name, :gender,:birthday, :user_id)";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
 
     //query persoon verwijderen
-    function removePerson($pdo, $id)
+    public function removePerson($id)
     {
         $data = [
             'id' => $id,
         ];
-        $sql = "DELETE FROM persons (id) VALUES (:id)";
-        $stmt = $pdo->prepare($sql);
+        $sql = "DELETE FROM persons WHERE id = (:id)";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
 
-    function getPersonsPerUser($pdo, $userId){
-        $stmt = $pdo->query("SELECT * FROM persons");
+    public function getPersonsPerUser($user_id){
+        $stmt = $this->pdo->query("SELECT * FROM persons");
         $persons = [];
         while ($row = $stmt->fetch()) {
             $person = [
