@@ -43,16 +43,19 @@ INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
 INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
     values ('Marry','van de Ruit','f','14-12-1969',1);
 
+INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
+    values ('Tannetje Margaretha Wilhelmina','Schwier','f','31-08-1994',1);
+
 INSERT INTO relations_types(relation_type)
     VALUES ('Married'),('Parent'),('Relationship');
 
 INSERT INTO relations(relation_type_id, person1, person2)
-     values (2,3,1);
+     values (1,48,49);
 
 -- aanpassen van V naar F (NL naar EN)
 UPDATE persons
-SET user_id = 70
-WHERE l_name = 'Berkiewood';
+SET deathday = '07-11-2020'
+WHERE id = 48;
 
 -- verwijder persoon
 delete from persons where id = 1;
@@ -65,3 +68,11 @@ RENAME TO relation_types;
 
 DELETE FROM users where id not in ('1','70');
 DELETE FROM persons where user_id = 70;
+DELETE FROM relations where relation_type_id = 'relation_type_id';
+
+-- opvragen relaties
+select r.relation_id,r.relation_type_id,rt.relation_type,r.person1, p.f_name, r.person2,p2.f_name
+from relations r
+left join persons p on r.person1 = p.id
+    join persons p2 on r.person2 = p2.id
+left join relations_types rt on r.relation_type_id = rt.relation_type_id;
