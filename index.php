@@ -40,10 +40,11 @@ class PersonsDatabase {
 
         $this->pdo = (new SQLiteConnection())->connect();
         if ($this->pdo != null) {
-            echo 'Connected to the SQLite database successfully!';
+            $data = ['message'=>"Connected to the SQLite database successfully!"];
         } else {
-            echo 'Whoops, could not connect to the SQLite database!';
+            $data = ["message"=>"Whoops, could not connect to the SQLite database!"];
         }
+        echo json_encode($data);
     }
 
     //query user toevoegen
@@ -103,6 +104,14 @@ class PersonsDatabase {
     }
 }
 
+
+/** JS voorbeeldje: hoe we data opvragen uit deze server applicatie
+ *
+```js
+ fetch("http://localhost:8000/").then(response=>response.json())
+.then(data=>{ console.log(data); })
+```
+ */
 
 // functies in objecten en class instantiatie
 
