@@ -12,11 +12,11 @@ function visualizePersonsPerUser($persons, $user_id) {
 }
 
 $person = [
-    "f_name" => "Jascha",
-    "l_name" => "Berkiewood",
-    "gender"=> "F",
-    "birthday" => "16-02-1995",
-    "user_id"=>70,
+    "f_name" => "Zoey",
+    "l_name" => "Berkhout",
+    "gender"=> "f",
+    "birthday" => "27-08-2002",
+    "user_id"=>1,
 ];
 
 $persons = $db->getPersonsPerUser(1);
@@ -26,7 +26,8 @@ $first_person = $persons[0];
 
 visualizePersonsPerUser($persons, 1);
 
-$db->insertPerson($person);
+// $db->insertPerson($person);
+// $db->removePerson(47);
 
 // objecten
 
@@ -55,7 +56,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function removeUser($id){
+    public function removeUser(int $id){
         $data = [
             'id' => $id,
         ];
@@ -64,7 +65,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function removeAllPersonsFromUser($user_id){
+    public function removeAllPersonsFromUser(int $user_id){
         $data = [
             'user_id' => $user_id,
         ];
@@ -88,7 +89,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function removePerson($id)
+    public function removePerson(int $id)
     {
         $data = [
             'id' => $id,
@@ -98,7 +99,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function getPersonsPerUser($user_id){
+    public function getPersonsPerUser(int $user_id){
         $stmt = $this->pdo->query("SELECT * FROM persons WHERE user_id = $user_id");
         $persons = [];
         while ($row = $stmt->fetch()) {
@@ -113,8 +114,50 @@ class PersonsDatabase {
         }
         return $persons;
     }
-}
 
+    public function insertRelationship(int $relation_type_id, int $person1, int $person2){
+        $data = [
+            'relation_type_id' => $relation_type_id,
+            'person1' => $person1,
+            'person2' => $person2,
+        ];
+
+        // if statement
+
+        $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
+    
+    public function insertDeathday($id,$deathday){
+        $data = [
+            'id' => $id,
+            'deathday' => $deathday,
+        ];
+
+        $sql = "UPDATE persons SET deathday = (:deathday) WHERE id = (:id)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
+
+    public function getAllRelationTypes(){
+        $stmt = $this->pdo->query("SELECT * FROM relation_types");
+        $relation_types = [];
+        while ($row = $stmt->fetch()) {
+            $relation_type = [
+                'relation_type_id' => $row['relation_type_id'],
+                'relation_type' => $row['relation_type'],
+            ];
+            $relation_types[] = $relation_type;
+        }
+        return $relation_types;
+    }
+};
+
+echo $db->getAllRelationTypes();
+
+// $db->insertRelationship(2,3,45);
+// $db->insertRelationship(2,43,45);
 
 /** JS voorbeeldje: hoe we data opvragen uit deze server applicatie
  *
