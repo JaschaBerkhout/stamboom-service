@@ -11,27 +11,21 @@ function visualizePersonsPerUser($persons, $user_id) {
     echo "</pre>";
 }
 
-$person = [
-    "f_name" => "Zoey",
-    "l_name" => "Berkhout",
-    "gender"=> "f",
-    "birthday" => "27-08-2002",
-    "user_id"=>1,
-];
+function visualizeRelationTypes($relation_types) {
+    echo "<br> <br>All possible relationship types: <hr>";
+    echo "<pre>";
+    print_r($relation_types);
+    echo "</pre>";
+}
 
 $persons = $db->getPersonsPerUser(1);
-// @todo: bedenk een tweede class om te gebruiken in deze file. > 
+$relation_types = $db->getAllRelationTypes();
+
+visualizePersonsPerUser($persons, 1);
+visualizeRelationTypes($relation_types);
 
 $first_person = $persons[0];
 
-visualizePersonsPerUser($persons, 1);
-
-// $db->insertPerson($person);
-// $db->removePerson(47);
-
-// objecten
-
-// classes
 class PersonsDatabase {
     private $pdo;
 
@@ -81,6 +75,7 @@ class PersonsDatabase {
             'l_name' => $person['l_name'],
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
+            // deathday?
             'user_id' => $person['user_id'], // later automatisch opvragen
         ];
 
@@ -108,6 +103,7 @@ class PersonsDatabase {
                 'l_name' => $row['l_name'],
                 'gender' => $row['gender'],
                 'birthday' => $row['birthday'],
+                'deathday' => $row['deathday'],
                 'user_id' => $row['user_id'], // later automatisch opvragen
             ];
             $persons[] = $person;
@@ -121,12 +117,13 @@ class PersonsDatabase {
             'person1' => $person1,
             'person2' => $person2,
         ];
-
-        // if statement
-
+        if($relation_type_id === 0){
         $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
+        } else {
+            echo "\n Relationship type not found.\n";
+        }
     }
     
     public function insertDeathday($id,$deathday){
@@ -152,12 +149,17 @@ class PersonsDatabase {
         }
         return $relation_types;
     }
+
 };
 
-echo $db->getAllRelationTypes();
+print_r($relation_types[0]['relation_type_id']); // for each loop?
 
 // $db->insertRelationship(2,3,45);
 // $db->insertRelationship(2,43,45);
+
+
+// @todo: bedenk een tweede class om te gebruiken in deze file. > 
+
 
 /** JS voorbeeldje: hoe we data opvragen uit deze server applicatie
  *
@@ -179,6 +181,3 @@ echo $db->getAllRelationTypes();
 // Requests GET
 // JSON
 // requests POST
-
-
-

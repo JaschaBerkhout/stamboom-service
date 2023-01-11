@@ -15,3 +15,15 @@ $persons = [$person1, $person2];
 
 $first = $persons[0];
 $last = $persons[count($persons)-1];
+
+
+$person = [
+    "f_name" => "Zoey",
+    "l_name" => "Berkhout",
+    "gender"=> "f",
+    "birthday" => "27-08-2002",
+    "user_id"=>1,
+];
+
+$db->insertPerson($person);
+$db->removePerson(47);

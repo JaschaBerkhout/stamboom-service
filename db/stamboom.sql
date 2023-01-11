@@ -76,3 +76,5 @@ from relations r
 left join persons p on r.person1 = p.id
     join persons p2 on r.person2 = p2.id
 left join relations_types rt on r.relation_type_id = rt.relation_type_id;
+
+select * from relation_types;
