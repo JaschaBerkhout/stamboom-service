@@ -5,20 +5,18 @@ use App\SQLiteConnection;
 $db = new PersonsDatabase();
 
 function visualizePersonsPerUser($persons, $user_id) {
-    echo "<br>Personen lijst: <hr>";
+    echo "<br> <br>All persons: <hr>";
     echo "<pre>";
     print_r($persons);
     echo "</pre>";
 }
-
-$db->insertUser('henkie', 'xxhorses123');
 
 $person = [
     "f_name" => "Jascha",
     "l_name" => "Berkiewood",
     "gender"=> "F",
     "birthday" => "16-02-1995",
-    "user_id"=>1,
+    "user_id"=>70,
 ];
 
 $persons = $db->getPersonsPerUser(1);
@@ -27,7 +25,6 @@ $persons = $db->getPersonsPerUser(1);
 $first_person = $persons[0];
 
 visualizePersonsPerUser($persons, 1);
-$db->removePerson(25);
 
 $db->insertPerson($person);
 
@@ -48,7 +45,6 @@ class PersonsDatabase {
         echo json_encode($data);
     }
 
-    //query user toevoegen
     public function insertUser($user_name, $password){
         $data = [
             'user_name' => $user_name,
@@ -58,8 +54,25 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-    
-    //query persoon toevoegen
+
+    public function removeUser($id){
+        $data = [
+            'id' => $id,
+        ];
+        $sql = "DELETE FROM users WHERE id = (:id)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
+
+    public function removeAllPersonsFromUser($user_id){
+        $data = [
+            'user_id' => $user_id,
+        ];
+        $sql = "DELETE FROM persons WHERE user_id = (:user_id)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
+
     public function insertPerson($person)
     {
         $data = [
@@ -75,7 +88,6 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    //query persoon verwijderen
     public function removePerson($id)
     {
         $data = [
@@ -87,7 +99,7 @@ class PersonsDatabase {
     }
 
     public function getPersonsPerUser($user_id){
-        $stmt = $this->pdo->query("SELECT * FROM persons");
+        $stmt = $this->pdo->query("SELECT * FROM persons WHERE user_id = $user_id");
         $persons = [];
         while ($row = $stmt->fetch()) {
             $person = [

@@ -51,8 +51,8 @@ INSERT INTO relations(relation_type_id, person1, person2)
 
 -- aanpassen van V naar F (NL naar EN)
 UPDATE persons
-SET birthday = '14-12-1969'
-WHERE id = 3;
+SET user_id = 70
+WHERE l_name = 'Berkiewood';
 
 -- verwijder persoon
 delete from persons where id = 1;
@@ -63,4 +63,5 @@ drop table persons;
 ALTER TABLE relations_types
 RENAME TO relation_types;
 
-
+DELETE FROM users where id not in ('1','70');
+DELETE FROM persons where user_id = 70;
