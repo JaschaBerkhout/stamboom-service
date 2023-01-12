@@ -21,7 +21,8 @@ function visualizeRelationTypes($relation_types) {
 $persons = $db->getPersonsPerUser(1);
 $relation_types = $db->getAllRelationTypes();
 
-visualizePersonsPerUser($persons, 1);
+
+// visualizePersonsPerUser($persons, 1);
 visualizeRelationTypes($relation_types);
 
 $first_person = $persons[0];
@@ -112,15 +113,17 @@ class PersonsDatabase {
     }
 
     public function insertRelationship(int $relation_type_id, int $person1, int $person2){
+        global $relation_types;
+        $relation_type_ids = array_column($relation_types,'relation_type_id');
         $data = [
             'relation_type_id' => $relation_type_id,
             'person1' => $person1,
             'person2' => $person2,
-        ];
-        if($relation_type_id === 0){
-        $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
+        ];        
+        if(in_array($relation_type_id,$relation_type_ids)){
+            $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($data);
         } else {
             echo "\n Relationship type not found.\n";
         }
@@ -131,12 +134,12 @@ class PersonsDatabase {
             'id' => $id,
             'deathday' => $deathday,
         ];
-
+        
         $sql = "UPDATE persons SET deathday = (:deathday) WHERE id = (:id)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function getAllRelationTypes(){
         $stmt = $this->pdo->query("SELECT * FROM relation_types");
         $relation_types = [];
@@ -149,10 +152,11 @@ class PersonsDatabase {
         }
         return $relation_types;
     }
-
 };
 
-print_r($relation_types[0]['relation_type_id']); // for each loop?
+
+$db->insertRelationship(6,2,3);
+
 
 // $db->insertRelationship(2,3,45);
 // $db->insertRelationship(2,43,45);
