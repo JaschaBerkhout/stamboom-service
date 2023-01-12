@@ -13,6 +13,11 @@ class Presenter
         $this->displayData($users, 'users');
     }
 
+    public function displayRelationTypes($relationTypes) {
+        $this->displayData($relationTypes, 'relatie types');
+    }
+
+
     private function displayData($data, $name) {
         echo "<br> <br>All $name: <hr>";
         echo "<pre>";

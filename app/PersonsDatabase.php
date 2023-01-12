@@ -63,7 +63,7 @@ class PersonsDatabase {
             'l_name' => $person['l_name'],
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
-            // deathday?
+            'deathday' => $person['deathday'] ?? '',
             'user_id' => $person['user_id'], // later automatisch opvragen
         ];
 
@@ -86,6 +86,7 @@ class PersonsDatabase {
         $persons = [];
         while ($row = $stmt->fetch()) {
             $person = [
+                'id' => $row['id'],
                 'f_name' => $row['f_name'],
                 'l_name' => $row['l_name'],
                 'gender' => $row['gender'],
@@ -99,29 +100,37 @@ class PersonsDatabase {
     }
 
     public function insertRelationship(int $relation_type_id, int $person1, int $person2){
-        if($this->existingRelationshipId($relation_type_id)){
-            $data = [
-                'relation_type_id' => $relation_type_id,
-                'person1' => $person1,
-                'person2' => $person2,
-            ];
-            $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
-        } else {
+
+        if(!$this->isValidRelationshipId($relation_type_id)){
             echo "\n Relationship type not found.\n";
+            return false;
         }
+
+        $data = [
+            'relation_type_id' => $relation_type_id,
+            'person1' => $person1,
+            'person2' => $person2,
+        ];
+        $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+
+        return true;
+
     }
-    
-    private function existingRelationshipId($id){
+
+    private function isValidRelationshipId($id){
         $relation_types = $this->getAllRelationTypes();
-        $relation_type_ids = array_column($relation_types,'relation_type_id');
-        if(in_array($id,$relation_type_ids)){
-            return TRUE;
-        }else {
-            return FALSE;
-        }
+        $relation_type_ids = array_column($relation_types, 'relation_type_id');
+
+        return in_array($id, $relation_type_ids);
     }
+
+
+    // ja ja... we moeten nog steeds hier een variant bouwen met een loop,
+    // Hint: die functie zoekt dus door alle relation types heen en indien de gegeven type id bestaat,
+    // true teruggeeft (return). En anders, na de loop, false teruggeeft.
+
 
     public function insertDeathday($id,$deathday){
         $data = [
