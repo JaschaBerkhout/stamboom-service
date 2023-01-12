@@ -30,4 +30,3 @@ function displayPersonsFromUser($db, $presenter, $user_id) {
     $presenter->displayPersons($persons);
 }
 
-

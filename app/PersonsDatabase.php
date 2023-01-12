@@ -72,8 +72,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function removePerson(int $id)
-    {
+    public function removePerson(int $id){
         $data = [
             'id' => $id,
         ];
@@ -100,19 +99,27 @@ class PersonsDatabase {
     }
 
     public function insertRelationship(int $relation_type_id, int $person1, int $person2){
-        $relation_types = $this->getAllRelationTypes();
-        $relation_type_ids = array_column($relation_types,'relation_type_id');
-        $data = [
-            'relation_type_id' => $relation_type_id,
-            'person1' => $person1,
-            'person2' => $person2,
-        ];
-        if(in_array($relation_type_id,$relation_type_ids)){
+        if($this->existingRelationshipId($relation_type_id)){
+            $data = [
+                'relation_type_id' => $relation_type_id,
+                'person1' => $person1,
+                'person2' => $person2,
+            ];
             $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($data);
         } else {
             echo "\n Relationship type not found.\n";
+        }
+    }
+    
+    private function existingRelationshipId($id){
+        $relation_types = $this->getAllRelationTypes();
+        $relation_type_ids = array_column($relation_types,'relation_type_id');
+        if(in_array($id,$relation_type_ids)){
+            return TRUE;
+        }else {
+            return FALSE;
         }
     }
 
@@ -139,4 +146,4 @@ class PersonsDatabase {
         }
         return $relation_types;
     }
-}
+};
