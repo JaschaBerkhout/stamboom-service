@@ -16,6 +16,18 @@ om docker te starten:
 .then(data=>{ console.log(data); })
 ```
 
+Hoe je een persoon toevoegt:
+```php
+$db->insertPerson([
+    'f_name' => 'Cornelis Jacobus Maria',
+    'l_name' => 'Berkhout',
+    'gender' => 'm',
+    'birthday' => '20-12-1944',
+    'deathday' => '07-11-2020',
+    'user_id' => 70,
+]);
+```
+
 // functies in objecten en class instantiatie
 
 // constructor

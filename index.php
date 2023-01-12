@@ -2,20 +2,21 @@
 require 'vendor/autoload.php';
 
 use App\PersonsDatabase;
+use App\Presenter;
 
 $db = new PersonsDatabase();
+$presenter = new Presenter();
 
-function visualizePersonsPerUser($persons, $user_id) {
-    echo "<br> <br>All persons: <hr>";
-    echo "<pre>";
-    print_r($persons);
-    echo "</pre>";
+$users = $db->getUsers();
+$presenter->displayUsers($users);
+
+function displayPersonsFromUser($db, $presenter, $user_id) {
+    $persons = $db->getPersonsPerUser($user_id);
+    echo "Displaying persons from $user_id";
+    $presenter->displayPersons($persons);
 }
 
-$persons = $db->getPersonsPerUser(1);
-
-visualizePersonsPerUser($persons, 1);
-
-$first_person = $persons[0];
+displayPersonsFromUser($db, $presenter, 1);
+displayPersonsFromUser($db, $presenter, 70);
 
 

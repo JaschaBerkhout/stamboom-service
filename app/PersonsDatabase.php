@@ -34,6 +34,19 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
+    public function getUsers() {
+        $stmt = $this->pdo->query("SELECT id, user_name FROM users");
+        $user = [];
+        while ($row = $stmt->fetch()) {
+            $person = [
+                'id' => $row['id'],
+                'user_name' => $row['user_name'],
+            ];
+            $user[] = $person;
+        }
+        return $user;
+    }
+
     public function removeAllPersonsFromUser(int $user_id){
         $data = [
             'user_id' => $user_id,
