@@ -11,27 +11,17 @@ function visualizePersonsPerUser($persons, $user_id) {
     echo "</pre>";
 }
 
-function visualizeRelationTypes($relation_types) {
-    echo "<br> <br>All possible relationship types: <hr>";
-    echo "<pre>";
-    print_r($relation_types);
-    echo "</pre>";
-}
-
 $persons = $db->getPersonsPerUser(1);
-$relation_types = $db->getAllRelationTypes();
 
-
-// visualizePersonsPerUser($persons, 1);
-visualizeRelationTypes($relation_types);
+visualizePersonsPerUser($persons, 1);
 
 $first_person = $persons[0];
 
 class PersonsDatabase {
     private $pdo;
-
+    
     public function __construct() {
-
+        
         $this->pdo = (new SQLiteConnection())->connect();
         if ($this->pdo != null) {
             $data = ['message'=>"Connected to the SQLite database successfully!"];
@@ -40,7 +30,7 @@ class PersonsDatabase {
         }
         echo json_encode($data);
     }
-
+    
     public function insertUser($user_name, $password){
         $data = [
             'user_name' => $user_name,
@@ -50,7 +40,7 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function removeUser(int $id){
         $data = [
             'id' => $id,
@@ -59,7 +49,7 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function removeAllPersonsFromUser(int $user_id){
         $data = [
             'user_id' => $user_id,
@@ -68,7 +58,7 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function insertPerson($person)
     {
         $data = [
@@ -79,12 +69,12 @@ class PersonsDatabase {
             // deathday?
             'user_id' => $person['user_id'], // later automatisch opvragen
         ];
-
+        
         $sql = "INSERT INTO persons (f_name, l_name, gender,birthday, user_id) VALUES (:f_name, :l_name, :gender,:birthday, :user_id)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function removePerson(int $id)
     {
         $data = [
@@ -94,7 +84,7 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
+    
     public function getPersonsPerUser(int $user_id){
         $stmt = $this->pdo->query("SELECT * FROM persons WHERE user_id = $user_id");
         $persons = [];
@@ -111,9 +101,9 @@ class PersonsDatabase {
         }
         return $persons;
     }
-
+    
     public function insertRelationship(int $relation_type_id, int $person1, int $person2){
-        global $relation_types;
+        $relation_types = $this->getAllRelationTypes();
         $relation_type_ids = array_column($relation_types,'relation_type_id');
         $data = [
             'relation_type_id' => $relation_type_id,
@@ -153,13 +143,6 @@ class PersonsDatabase {
         return $relation_types;
     }
 };
-
-
-$db->insertRelationship(6,2,3);
-
-
-// $db->insertRelationship(2,3,45);
-// $db->insertRelationship(2,43,45);
 
 
 // @todo: bedenk een tweede class om te gebruiken in deze file. > 
