@@ -24,6 +24,7 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
+    // check of user niet al bestaat
 
     public function removeUser(int $id){
         $data = [
@@ -126,12 +127,6 @@ class PersonsDatabase {
         return in_array($id, $relation_type_ids);
     }
 
-
-    // ja ja... we moeten nog steeds hier een variant bouwen met een loop,
-    // Hint: die functie zoekt dus door alle relation types heen en indien de gegeven type id bestaat,
-    // true teruggeeft (return). En anders, na de loop, false teruggeeft.
-
-
     public function insertDeathday($id,$deathday){
         $data = [
             'id' => $id,
@@ -156,3 +151,4 @@ class PersonsDatabase {
         return $relation_types;
     }
 };
+

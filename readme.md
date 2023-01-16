@@ -18,14 +18,23 @@ om docker te starten:
 
 Hoe je een persoon toevoegt:
 ```php
-$db->insertPerson([
-    'f_name' => 'Cornelis Jacobus Maria',
-    'l_name' => 'Berkhout',
-    'gender' => 'm',
-    'birthday' => '20-12-1944',
-    'deathday' => '07-11-2020',
-    'user_id' => 70,
-]);
+    $db->insertPerson([
+        'f_name' => 'Cornelis Jacobus Maria',
+        'l_name' => 'Berkhout',
+        'gender' => 'm',
+        'birthday' => '20-12-1944',
+        'deathday' => '07-11-2020',
+        'user_id' => 70,
+    ]);
+```
+// testen
+opbouw test
+```     function NAME($db){
+        $this->laatTestNaamZien(__METHOD__);
+        test hier //
+        $verwachting;
+        is $resultaat gelijk aan $verwachting
+        $this->laatTestResultaatZien($test_resultaat, $verwachting);
 ```
 
 // functies in objecten en class instantiatie

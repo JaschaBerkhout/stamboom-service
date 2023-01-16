@@ -17,11 +17,17 @@ class Presenter
         $this->displayData($relationTypes, 'relatie types');
     }
 
-
     private function displayData($data, $name) {
         echo "<br> <br>All $name: <hr>";
         echo "<pre>";
         print_r($data);
         echo "</pre>";
+    }
+
+    public function displayPersonsFromUser($db, $presenter, $user_id) {
+        $persons = $db->getPersonsPerUser($user_id);
+        echo "<br>";
+        echo "Displaying persons from user $user_id";
+        $this->displayPersons($persons);
     }
 }
