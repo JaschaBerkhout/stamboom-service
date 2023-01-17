@@ -12,7 +12,7 @@ class PersonsDatabase {
         } else {
             $data = ["message"=>"Whoops, could not connect to the SQLite database!"];
         }
-        echo json_encode($data);
+        // echo json_encode($data);
     }
 
     public function insertUser($user_name, $password){
@@ -24,7 +24,6 @@ class PersonsDatabase {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-    // check of user niet al bestaat
 
     public function removeUser(int $id){
         $data = [
@@ -141,6 +140,17 @@ class PersonsDatabase {
 
         return in_array($id, $relation_type_ids);
     }
+
+    private function isValidRelationshipIdLoop($id){
+        foreach($relation_types as $relation_type_array){
+            if($relation_type_array['relation_type_id'] == $id){
+                print_r($relation_type_array['relation_type_id']);
+                print_r('TRUE');
+                break;
+            } print_r('FALSE');
+        }
+    }
+
 
     public function insertDeathday($id,$deathday){
         $data = [

@@ -31,10 +31,3 @@ $db->removePerson(47);
 
 $relation_types = $db->getAllRelationTypes();
 
-foreach($relation_types as $relation_type_array){
-    if($relation_type_array['relation_type_id'] == "6"){
-    print_r($relation_type_array['relation_type_id']);
-    print_r('TRUE');
-    break;
-} print_r('FALSE');
-}

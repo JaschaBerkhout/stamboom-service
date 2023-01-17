@@ -6,7 +6,9 @@ om docker te starten:
 ## mogelijke todo's
 
 
-// @todo: bedenk een tweede class om te gebruiken in deze file. >
+// @todo: maak een functie die checkt of een user naam niet al bestaat, 
+    check op wachtwoord
+// @todo: add person validation
 
 
 /** JS voorbeeldje: hoe we data opvragen uit deze server applicatie
@@ -36,16 +38,7 @@ opbouw test
         is $resultaat gelijk aan $verwachting
         $this->laatTestResultaatZien($test_resultaat, $verwachting);
 ```
-
-// functies in objecten en class instantiatie
-
-// constructor
-
-// scope
-
-// database
-
-
-// Requests GET
-// JSON
-// requests POST
+//GET parameters in URL gebruiken
+// personen_json zorgt voor json versie van de personen lijst
+// user_id zorgt dat je alleen de personen van die user ziet.
+```http://localhost:8000/?type=personen_json&user_id=1```

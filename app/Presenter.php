@@ -24,10 +24,7 @@ class Presenter
         echo "</pre>";
     }
 
-    public function displayPersonsFromUser($db, $user_id) {
-        $persons = $db->getPersonsPerUser($user_id);
-        echo "<br>";
-        echo "Displaying persons from user $user_id";
-        $this->displayPersons($persons);
+    public function displayDataJson($data) {
+        echo json_encode($data,JSON_PRETTY_PRINT);
     }
 }

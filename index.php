@@ -19,15 +19,29 @@ function takeActionBasedOnType($db, $presenter)
         $users = $db->getUsers();
         $presenter->displayUsers($users);
     } elseif ($type === 'persons') {
-        $presenter->displayPersonsFromUser($db, 1);
+        displayPersonsFromUser($db, 1);
     } elseif ($type === 'relation_types') {
         $relation_types = $db->getAllRelationTypes();
         $presenter->displayRelationTypes($relation_types);
-    } elseif($type=="testing") {
+    } elseif($type === "testing") {
         voerTestjesUit($db);
+    } elseif($type === "personen_json"){
+        displayPersonsFromUserJson($db,$presenter,$_GET['user_id']);
     } else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
+}
+
+function displayPersonsFromUser($db, $user_id) {
+    $persons = $db->getPersonsPerUser($user_id);
+    echo "<br>";
+    echo "Displaying persons from user $user_id";
+    $presenter->displayPersons($persons);
+}
+
+function displayPersonsFromUserJson($db,$presenter,$user_id){
+    $persons = $db->getPersonsPerUser($user_id);
+    $presenter->displayDataJson($persons);
 }
 
 function voerTestjesUit($db) {
