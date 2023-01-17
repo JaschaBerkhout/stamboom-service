@@ -2,63 +2,119 @@
 namespace App;
 
 class Tester {
+
+    private $db;
+
+    public function __construct($db) {
+        $this->db = $db;
+    }
+
     
     private function laatTestNaamZien($test_naam) {
         echo "<br> ". $test_naam . " : ";
     }
     
-    private function laatTestResultaatZien($resultaat, $verwachting) {
+    private function expectCertainResult($resultaat, $verwachting) {
         echo $resultaat === $verwachting ? "Test is gelukt" : "Test is niet gelukt!";
     }
 
+    private function testPersoon($user_id = 70, $deathday = null){
+       return [
+            'f_name' => 'voornaam',
+            'l_name' => 'l_name',
+            'gender' => 'gender',
+            'birthday' => 'birthday',
+            'deathday' => $deathday,
+            'user_id' => $user_id,
+        ];
+    }
+
+    private function getLevendPersoon() {
+        return $this->testPersoon();
+    }
+    private function getDooie() {
+        return $this->testPersoon('01-01-2023');
+    }
+
+
 // wat gebeurt er als je een relatie toevoegt van een type die bestaat
-    public function testInsertValidRelationship($db) {
+    public function testInsertValidRelationship() {
         $this->laatTestNaamZien(__METHOD__);
-        $resultaat = $db->insertRelationship(2, 43, 2);
+        $resultaat = $this->db->insertRelationship(2, 43, 2);
         $verwachting = true;
-        $this->laatTestResultaatZien($resultaat, $verwachting);
+        $this->expectCertainResult($resultaat, $verwachting);
     }
 
 // wat gebeurt er als je een relatie toevoegt van een type die NIET bestaat
-    public function testInsertInvalidRelationship($db) {
+    public function testInsertInvalidRelationship() {
         $this->laatTestNaamZien(__METHOD__);
-        $resultaat = $db->insertRelationship(21298, 43, 2);
+        $resultaat = $this->db->insertRelationship(21298, 43, 2);
         $verwachting = false;
-        $this->laatTestResultaatZien($resultaat, $verwachting);
+        $this->expectCertainResult($resultaat, $verwachting);
     }
+
+
+        // @todo: try catch
+
+        // verwacht foutmelding
+    
 
     // schrijf nog meer testjes!
-    public function testAddPersonWithoutDeathday($db){
-        $this->laatTestNaamZien(__METHOD__);
-        $resultaat = $db->insertPerson([
-            "f_name" => "Cornelis Jacobus Maria",
-            "l_name" => "Berkhout",
-            "gender" => "m",
-            "birthday" => "20-12-1944",
-            "user_id" => 70,
-        ]);
-        $verwachting = true;
-        $this->laatTestResultaatZien($resultaat,$verwachting);
-    }
-
-    public function testAddPersonWithDeathday($db){
-        this->laatTestNaamZien(__METHOD__);
-        $resultaat = $db->insertPerson([
-            "f_name" => "Cornelis Jacobus Maria",
-            "l_name" => "Berkhout",
-            "gender" => "m",
-            "birthday" => "20-12-1944",
-            "deathday" => "07-11-2020",
-            "user_id" => 70,
-        ]);
-        $verwachting = true;
-        $this->laatTestResultaatZien($resultaat,$verwachting);
-    }
-
-    
-    // we willen ook nog testen:
-    // wat gebeurt er als je een persoon toevoegt met een deathday
     // wat gebeurt er als je een persoon toevoegt ZONDER een deathday
-    
+   
+    public function testAddPersonWithoutDataGivesFalse() {
+        
+        // wat test je?
+        
+        // wat wil je hebbeN?
+        $this->laatTestNaamZien(__METHOD__);
+        $resultaat = $this->db->insertPerson(null);
+
+        $this->expectCertainResult($resultaat,false);
+    }
+
+
+    public function testAddPersonWithoutDeathday(){
+        $this->laatTestNaamZien(__METHOD__);
+        $test_persoon = $this->getLevendPersoon();
+        $resultaat = $this->db->insertPerson($test_persoon);
+        $verwachting = true;
+        $this->expectCertainResult($resultaat,$verwachting);
+    }
+
+    // wat gebeurt er als je een persoon toevoegt met een deathday
+    public function testAddPersonWithDeathday(){
+        $this->laatTestNaamZien(__METHOD__);
+        $test_persoon = $this->getDooie();
+        $resultaat = $this->db->insertPerson($test_persoon); 
+        $verwachting = true;
+        $this->expectCertainResult($resultaat,$verwachting);
+    }
+
+
+    // zou dit beter werken dan losse array in de test? Die werkte niet. 
+
+    // we willen ook nog testen:
+
+
+    // gebruik in voorbereiding de toevoeg functie
+    // wil testen: persoon verwijderen > die hiervoor zijn toegevoegd
+
+    // resultaat true
+    // eind restulaat check of alle personen uit zijn, is persons van user x leeg    
+
+    public function testPersonenVerwijderenVanUser(){
+        $this->laatTestNaamZien(__METHOD__);
+
+        // arrangeren
+        $this->db->insertPerson($this->getLevendPersoon());
+        
+        // acteren
+        $this->db->removeAllPersonsFromUser(70);
+        
+        // assertief zijn
+        $aantalPersonenPerUser = count($this->db->getPersonsPerUser(70));
+        $this->expectCertainResult($aantalPersonenPerUser,0);
+    }
 
 };

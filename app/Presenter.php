@@ -24,7 +24,7 @@ class Presenter
         echo "</pre>";
     }
 
-    public function displayPersonsFromUser($db, $presenter, $user_id) {
+    public function displayPersonsFromUser($db, $user_id) {
         $persons = $db->getPersonsPerUser($user_id);
         echo "<br>";
         echo "Displaying persons from user $user_id";

@@ -19,22 +19,24 @@ function takeActionBasedOnType($db, $presenter)
         $users = $db->getUsers();
         $presenter->displayUsers($users);
     } elseif ($type === 'persons') {
-        $presenter->displayPersonsFromUser($db, $presenter, 1);
+        $presenter->displayPersonsFromUser($db, 1);
     } elseif ($type === 'relation_types') {
         $relation_types = $db->getAllRelationTypes();
         $presenter->displayRelationTypes($relation_types);
+    } elseif($type=="testing") {
+        voerTestjesUit($db);
     } else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
 }
 
-
-echo "<HR> TEST ZONE <HR>";
-$tester = new Tester();
-$tester->testInsertValidRelationship($db);
-$tester->testInsertInvalidRelationship($db);
-
-// voer nog meer testjes uit!
-
-$tester->testAddPersonWithoutDeathday($db);
-$tester->testAddPersonWithDeathday($db);
+function voerTestjesUit($db) {
+    echo "<HR> TEST ZONE <HR>";
+    $tester = new Tester($db);
+    $tester->testInsertValidRelationship();
+    $tester->testInsertInvalidRelationship();
+    $tester->testAddPersonWithoutDeathday();
+    $tester->testAddPersonWithDeathday();
+    $tester->testAddPersonWithoutDataGivesFalse();
+    $tester->testPersonenVerwijderenVanUser();
+}

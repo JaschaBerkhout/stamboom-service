@@ -59,6 +59,12 @@ class PersonsDatabase {
 
     public function insertPerson($person)
     {
+        // @todo: add person validation
+        if($person === null) {
+         return false;
+        }
+        
+
         $data = [
             'f_name' => $person['f_name'],
             'l_name' => $person['l_name'],
@@ -66,11 +72,20 @@ class PersonsDatabase {
             'birthday' => $person['birthday'],
             'deathday' => $person['deathday'] ?? '',
             'user_id' => $person['user_id'], // later automatisch opvragen
-        ];
+        ];        
 
-        $sql = "INSERT INTO persons (f_name, l_name, gender,birthday, user_id) VALUES (:f_name, :l_name, :gender,:birthday, :user_id)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
+        $sql = "INSERT INTO persons (f_name, l_name, gender,birthday,deathday,user_id) VALUES (:f_name, :l_name, :gender,:birthday,:deathday, :user_id)";
+        
+        try {
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($data);
+        } catch(\Exception $e) {
+            return false;
+        }
+    
+        
+        return true;
     }
 
     public function removePerson(int $id){
