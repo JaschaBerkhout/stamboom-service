@@ -62,7 +62,6 @@ class PersonsDatabase {
         if($person === null) {
          return false;
         }
-        
 
         $data = [
             'f_name' => $person['f_name'],

@@ -11,7 +11,6 @@ $presenter = new Presenter();
 
 takeActionBasedOnType($db, $presenter);
 
-
 function takeActionBasedOnType($db, $presenter)
 {
     $type = $_GET['type'];
@@ -19,7 +18,7 @@ function takeActionBasedOnType($db, $presenter)
         $users = $db->getUsers();
         $presenter->displayUsers($users);
     } elseif ($type === 'persons') {
-        displayPersonsFromUser($db, 1);
+        displayPersonsFromUser($db,$presenter, 1);
     } elseif ($type === 'relation_types') {
         $relation_types = $db->getAllRelationTypes();
         $presenter->displayRelationTypes($relation_types);
@@ -27,12 +26,18 @@ function takeActionBasedOnType($db, $presenter)
         voerTestjesUit($db);
     } elseif($type === "personen_json"){
         displayPersonsFromUserJson($db,$presenter,$_GET['user_id']);
+    } elseif($type === "insert_person") {
+        if(!empty($_POST['user_id']) && is_numeric($_POST['user_id'])){
+        var_dump($db->insertPerson($_POST));
+        } else {
+            exit("LEEG zoals je toekomst");
+        }
     } else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
 }
 
-function displayPersonsFromUser($db, $user_id) {
+function displayPersonsFromUser($db,$presenter, $user_id) {
     $persons = $db->getPersonsPerUser($user_id);
     echo "<br>";
     echo "Displaying persons from user $user_id";

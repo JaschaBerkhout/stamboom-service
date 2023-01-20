@@ -18,72 +18,9 @@ class Familie {
   addPersoon(persoon){
     persoon.id = this.numberOfPersons()
     this.personen[persoon.id] = persoon;
-    updateSummary(this.numberOfPersons())
     updateFamilyTreeOnWebpage()
   }
 
-  numberOfPersons(){
-    return this.personen.length
-  }
-
-  sortOnBirthday(){
-    return this.personen.sort((jong, oud) => jong.birthday - oud.birthday)
-  }
-};
-
-class Persoon {
-  constructor(fName, lName, gender, birthday, deathday){
-    this.fName = fName
-    this.lName = lName
-    this.gender = gender
-    this.birthday = birthday
-    this.deathday = deathday
-  }
-
-  name(){
-    return this.fName + ' ' + this.lName
-  }
-
-  getAge(datumStart, datumEind){
-    let leeftijd = datumEind.getFullYear() - datumStart.getFullYear();
-    const maand = datumEind.getMonth() - datumStart.getMonth();
-    const dag = datumEind.getDate() - datumStart.getDate()
-    if (maand < 0 || (maand === 0 && dag < 0)){
-    return leeftijd - 1;
-    }
-    return leeftijd
-  }
-
-  getAgeOfPerson(){
-     const geboortedatum = new Date(this.birthday);
-
-    if (!this.isPassedAway()){
-      const vandaag = new Date();
-        return this.getAge(geboortedatum,vandaag);       
-    }
-    const overlijdensdatum = new Date(this.deathday);
-    return this.getAge(geboortedatum,overlijdensdatum);
-  }
-
-  personCard() {
-    return "<div class='"+ (this.gender === 'm' ? 'man' : 'vrouw')+ " persoon'>"+this.name() +
-     ' <br> '+ this.getAgeOfPerson()+
-     ' jaar' +
-     ' <br>* ' +
-     this.niceDateFormat(this.birthday) +
-     ' <br>' +
-     (this.isPassedAway() ? '✝ ' + this.niceDateFormat(this.deathday) : '') +
-     '</div>';
-  }
-
-  niceDateFormat(datum) {
-    return new Date(datum).toLocaleDateString('nl-nl');
-  }
-
-  isPassedAway(){
-    return this.deathday !== ''
-  }  
-};
 
 class Database {
   constructor(){}
@@ -97,7 +34,6 @@ class Database {
     return JSON.parse(window.localStorage.getItem('personen'))
   }
 
-  //verwijderd nu key:value helemaal.. moet alleen value worden.
   removePersonFromLocalStorage(id){
     window.localStorage.removeItem('personen',id);
   }
@@ -137,45 +73,6 @@ function createNewPerson(){
 
   messageNewPersonCreated(persoon);
 
-};
-
-function updateSummary(numberOfPersons) {
-  const samenvatting = document.getElementById('samenvatting')
-
-  let summaryText = () => {
-    if (numberOfPersons === 1 ){
-      return `De familie bevat nu ${numberOfPersons} persoon.`
-    } 
-    else {
-      return `De familie bevat nu ${numberOfPersons} personen.`
-    }
-  }
-  samenvatting.innerHTML = summaryText()
-};
-
-function generalMessage(tekst){
-  const meldingElement = document.getElementById('melding')
-  meldingElement.innerHTML = tekst
-  removeMessage()
-};
-
-function removeMessage(){  
-  setTimeout(() => document.getElementById('melding').innerHTML = '', 5000);
-};
-
-function messageNewPersonCreated(persoon) {
- generalMessage(`${persoon.fName} is toegevoegd aan de familie ${persoon.lName}.`);
-};
-
-function allOfTheFamily() {
-  let result = '';
-  DeFamilie.personen.forEach(persoon => result += persoon.personCard())
-  return result;
-};
-
-function updateFamilyTreeOnWebpage(){
-  const personenElement = document.getElementById('personen');
-  personenElement.innerHTML = allOfTheFamily();
 };
 
 

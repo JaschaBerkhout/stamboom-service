@@ -41,93 +41,38 @@
                 </div>
             </div>
         </nav>
-          <div class="container">
-
-            <form>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                  <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail3">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword3">
-                  </div>
-                </div>
-                <fieldset class="form-group">
-                  <div class="row">
-                    <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                    <div class="col-sm-10">
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                        <label class="form-check-label" for="gridRadios1">
-                          First radio
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                        <label class="form-check-label" for="gridRadios2">
-                          Second radio
-                        </label>
-                      </div>
-                      <div class="form-check disabled">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
-                        <label class="form-check-label" for="gridRadios3">
-                          Third disabled radio
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <div class="form-group row">
-                  <div class="col-sm-2">Checkbox</div>
-                  <div class="col-sm-10">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="gridCheck1">
-                      <label class="form-check-label" for="gridCheck1">
-                        Example checkbox
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
-                  </div>
-                </div>
-              </form>
-
-
-
-
-
-
-
-
-            <!-- <div class="form">
-                <form>
+        <div class="container">
+            <div class="melding" id="melding"> >Melding komt hier<
+            </div>
+            <div class="form">
+                <form method="post" action="http://localhost:8000/?type=insert_person&user_id=70">
                     <div class="form-group">
                         <label for="fname">Voornaam:</label><br>
-                        <input type="text" class="form-control" id="fname" name="fname"><br>
+                        <input type="text" class="form-control" id="fname" name="f_name" required><br>
                         <label for="lname">Achternaam:</label><br>
-                        <input type="text" class="form-control" id="lname" name="lname"><br>
+                        <input type="text" class="form-control" id="lname" name="l_name" required><br>
                         <label for="bday">Geboortdatum:</label><br>
-                        <input type="date" class="form-control" id="bday" name="bday"><br>
+                        <input type="date" class="form-control" id="bday" name="birthday" required><br>
                         <label for="dday">Overlijdensdatum:</label><br>
-                        <input type="date" class="form-control" id="dday" name="dday"><br><br>
-                        <label for="gender">Geslacht:</label><br>
-                        <input type="radio" class="form-check-input" id="man" name="gender" value="m">
+                        // misschien checkbox maken met uitklapper als iemand dood is?
+                        <input type="date" class="form-control" id="dday" name="deathday"><br><br>
+                        <label for="vrouw">Geslacht:</label><br>
+                        <input type="radio" class="form-check-input" id="man" name="gender" value="m" required>
                         <label for="man">Man</label>
-                        <input type="radio" class="form-check-input" id="vrouw" name="gender" value="f">
+                        <input type="radio" class="form-check-input" id="vrouw" name="gender" value="f" required>
                         <label for="vrouw">Vrouw</label><br><br>
-                        <button type="button" class="button" value="submit" onclick="createNewPerson()">
+                        <input type="hidden" name="user_id" value="70">
+                        <button type="submit" class="button" value="submit">
                             Submit
                         </button>
                     </div>
                 </form>
-            </div> -->
+            </div>
+
+
+
+
+
           </div>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
