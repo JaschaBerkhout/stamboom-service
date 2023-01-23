@@ -32,6 +32,12 @@ function takeActionBasedOnType($db, $presenter)
         } else {
             exit("LEEG zoals je toekomst");
         }
+    } elseif($type === "insert_user") {
+        if(!empty($_POST['email']) && !empty($_POST['password'])){
+            var_dump($db->insertUser($_POST));
+        } else {
+            exit("LEEG zoals je toekomst");
+        }
     } else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
