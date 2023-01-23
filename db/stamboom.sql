@@ -1,6 +1,7 @@
 CREATE TABLE users(
     id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    user_name varchar(255) NOT NULL,
+    email_address varchar(255) NOT NULL,
+    user_name varchar(255),
     password varchar(255) NOT NULL
 );
 
@@ -53,9 +54,9 @@ INSERT INTO relations(relation_type_id, person1, person2)
      values (1,48,49);
 
 -- aanpassen van V naar F (NL naar EN)
-UPDATE persons
-SET birthday = '1969-12-14'
-WHERE id = 3;
+UPDATE users
+SET email_address = 'test@example.com'
+WHERE id = 70;
 
 -- verwijder persoon
 delete from persons where id = 1;
@@ -79,4 +80,4 @@ left join relations_types rt on r.relation_type_id = rt.relation_type_id;
 
 select * from relation_types;
 
-insert into persons (f_name, l_name, gender, birthday, user_id) values ('Jacoba Hendrika', 'Wolf','f','1951-09-29',1);
+insert into users (email_address, user_name, password) VALUES ('test@test.com','Test','LekkerTesten');

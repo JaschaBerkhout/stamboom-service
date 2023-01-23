@@ -39,7 +39,7 @@
             <div class="melding" id="melding"> >Melding komt hier<
             </div>
             <div class="form">
-                <form method="post" action="http://localhost:8000/?type=insert_person&user_id=70">
+                <form method="POST" action="http://localhost:8000/?type=insert_person&user_id=2">
                     <div class="form-group">
                         <label for="f_name">Voornaam:</label><br>
                         <input type="text" class="form-control" id="f_name" name="f_name" required><br>
@@ -55,7 +55,7 @@
                         <label for="man">Man</label>
                         <input type="radio" class="form-check-input" id="vrouw" name="gender" value="f" required>
                         <label for="vrouw">Vrouw</label><br><br>
-                        <input type="hidden" name="user_id" value="70">
+                        <input type="hidden" name="user_id" value="2">
                         <button type="submit" class="button" value="submit">
                             Submit
                         </button>
