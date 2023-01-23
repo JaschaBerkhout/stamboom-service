@@ -14,7 +14,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="homepage.html">
                     <img src="./images/boom2.png" alt="berkenboom" height=30px class="d-inline-block align-text-top"> Stamboom
                 </a>
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
@@ -28,16 +28,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="faq.html">FAQ</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Log in</a>
+                        </li>
                     </ul>
-                        <form>
-                            <div class="form-">
-                                <div class="form-group">
-                                <input type="text" class="form-control-sm" placeholder="Gebruikersnaam">
-                                <input type="password" class="form-control-sm" placeholder="Wachtwoord">
-                                <button type="submit" class="button">Log in</button>
-                                </div>
-                            </div>
-                        </form>
                 </div>
             </div>
         </nav>
@@ -47,15 +41,15 @@
             <div class="form">
                 <form method="post" action="http://localhost:8000/?type=insert_person&user_id=70">
                     <div class="form-group">
-                        <label for="fname">Voornaam:</label><br>
-                        <input type="text" class="form-control" id="fname" name="f_name" required><br>
-                        <label for="lname">Achternaam:</label><br>
-                        <input type="text" class="form-control" id="lname" name="l_name" required><br>
-                        <label for="bday">Geboortdatum:</label><br>
-                        <input type="date" class="form-control" id="bday" name="birthday" required><br>
-                        <label for="dday">Overlijdensdatum:</label><br>
-                        // misschien checkbox maken met uitklapper als iemand dood is?
-                        <input type="date" class="form-control" id="dday" name="deathday"><br><br>
+                        <label for="f_name">Voornaam:</label><br>
+                        <input type="text" class="form-control" id="f_name" name="f_name" required><br>
+                        <label for="l_name">Achternaam:</label><br>
+                        <input type="text" class="form-control" id="l_name" name="l_name" required><br>
+                        <label for="birthday">Geboortdatum:</label><br>
+                        <input type="date" class="form-control" id="birthday" name="birthday" required><br>
+                        <label for="deathday">Overlijdensdatum:</label><br>
+<!--                        misschien checkbox maken met uitklapper als iemand dood is?-->
+                        <input type="date" class="form-control" id="deathday" name="deathday"><br><br>
                         <label for="vrouw">Geslacht:</label><br>
                         <input type="radio" class="form-check-input" id="man" name="gender" value="m" required>
                         <label for="man">Man</label>
