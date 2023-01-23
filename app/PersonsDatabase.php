@@ -15,12 +15,13 @@ class PersonsDatabase {
         // echo json_encode($data);
     }
 
-    public function insertUser($user_name, $password){
+    public function insertUser($new_user){
         $data = [
-            'user_name' => $user_name,
-            'password' => $password,
+            'email' => $new_user['email'],
+            'user_name' => $new_user['user_name'],
+            'password' => $new_user['password'],
         ];
-        $sql = "INSERT INTO users (user_name, password) VALUES (:user_name, :password)";
+        $sql = "INSERT INTO users (email_address,user_name, password) VALUES (:email,:user_name, :password)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
@@ -35,17 +36,26 @@ class PersonsDatabase {
     }
 
     public function getUsers() {
-        $stmt = $this->pdo->query("SELECT id, user_name FROM users");
+        $stmt = $this->pdo->query("SELECT id,email_address, user_name FROM users");
         $user = [];
         while ($row = $stmt->fetch()) {
             $person = [
                 'id' => $row['id'],
                 'user_name' => $row['user_name'],
+                'email_address' => $row['email_address'],
             ];
             $user[] = $person;
         }
         return $user;
     }
+
+    public function isRegisteredEmailaddress($email){
+        $users = $this->getUsers();
+        $email_addresses = array_column($users, 'email_address');
+
+        return in_array($email, $email_addresses);
+    }
+
 
     public function removeAllPersonsFromUser(int $user_id){
         $data = [
@@ -68,7 +78,7 @@ class PersonsDatabase {
             'l_name' => $person['l_name'],
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
-            'deathday' => $person['deathday'] ?? '',
+            'deathday' => $person['deathday'] ?? null, //fix dit.
             'user_id' => $person['user_id'], // later automatisch opvragen
         ];        
 

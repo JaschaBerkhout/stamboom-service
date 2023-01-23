@@ -65,3 +65,5 @@ function voerTestjesUit($db) {
     $tester->testAddPersonWithoutDataGivesFalse();
     $tester->testPersonenVerwijderenVanUser();
 }
+
+var_dump($db->isRegisteredEmailaddress('jaschaberkhout95@gmail.com'));
