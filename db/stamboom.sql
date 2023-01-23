@@ -81,3 +81,5 @@ left join relations_types rt on r.relation_type_id = rt.relation_type_id;
 select * from relation_types;
 
 insert into users (email_address, user_name, password) VALUES ('test@test.com','Test','LekkerTesten');
+
+SELECT id FROM users WHERE email_address = 'jaschaberkhout95@gmail.com';

@@ -117,4 +117,7 @@ class Tester {
         $this->expectCertainResult($aantalPersonenPerUser,0);
     }
 
+
+
+    // testjes schrijven voor user toevoegen met meerdere mogelijkheden
 };

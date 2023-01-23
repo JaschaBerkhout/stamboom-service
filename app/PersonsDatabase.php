@@ -16,14 +16,22 @@ class PersonsDatabase {
     }
 
     public function insertUser($new_user){
+        if($this->getUserIdBasedOnEmail($new_user['email']) !== FALSE){
+
+            return false;
+        }
+
         $data = [
             'email' => $new_user['email'],
             'user_name' => $new_user['user_name'],
             'password' => $new_user['password'],
         ];
-        $sql = "INSERT INTO users (email_address,user_name, password) VALUES (:email,:user_name, :password)";
+
+
+        $sql = "INSERT INTO users (email_address,user_name, password) VALUES (:email,:user_name,:password)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
+        return $stmt->execute($data);
+
     }
 
     public function removeUser(int $id){
@@ -46,16 +54,20 @@ class PersonsDatabase {
             ];
             $user[] = $person;
         }
+
         return $user;
     }
 
-    public function isRegisteredEmailaddress($email){
-        $users = $this->getUsers();
-        $email_addresses = array_column($users, 'email_address');
+    public function getUserIdBasedOnEmail($email){
+        $stmt = $this->pdo->query("SELECT id FROM users WHERE email_address = '$email' LIMIT 1");
+        $result = $stmt->fetch();
+        if($result === FALSE){
+            return FALSE;
+        }
 
-        return in_array($email, $email_addresses);
+        return $result['id'];
+
     }
-
 
     public function removeAllPersonsFromUser(int $user_id){
         $data = [
@@ -151,6 +163,7 @@ class PersonsDatabase {
     }
 
     private function isValidRelationshipIdLoop($id){
+        $relation_types = $this->getAllRelationTypes();
         foreach($relation_types as $relation_type_array){
             if($relation_type_array['relation_type_id'] == $id){
                 print_r($relation_type_array['relation_type_id']);
@@ -159,7 +172,6 @@ class PersonsDatabase {
             } print_r('FALSE');
         }
     }
-
 
     public function insertDeathday($id,$deathday){
         $data = [
@@ -184,5 +196,7 @@ class PersonsDatabase {
         }
         return $relation_types;
     }
+
+
 };
 

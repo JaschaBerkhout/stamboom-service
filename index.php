@@ -33,14 +33,26 @@ function takeActionBasedOnType($db, $presenter)
             exit("LEEG zoals je toekomst");
         }
     } elseif($type === "insert_user") {
-        if(!empty($_POST['email']) && !empty($_POST['password'])){
-            var_dump($db->insertUser($_POST));
-        } else {
-            exit("LEEG zoals je toekomst");
-        }
+        handleInsertUser($db);
     } else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
+}
+
+function handleInsertUser($db){
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+        exit("LEEG zoals je toekomst");
+    }
+
+    if ($db->insertUser($_POST)){
+        $id = $db->getUserIdBasedOnEmail($_POST['email']);
+            if($id !== FALSE){
+                print_r($id);
+                return;
+            } exit("Kon niet vinden!");
+    }
+    exit("Kon niet toevoegen!");
+
 }
 
 function displayPersonsFromUser($db,$presenter, $user_id) {
@@ -65,5 +77,3 @@ function voerTestjesUit($db) {
     $tester->testAddPersonWithoutDataGivesFalse();
     $tester->testPersonenVerwijderenVanUser();
 }
-
-var_dump($db->isRegisteredEmailaddress('jaschaberkhout95@gmail.com'));
