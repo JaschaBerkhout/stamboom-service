@@ -23,8 +23,4 @@ class Presenter
         print_r($data);
         echo "</pre>";
     }
-
-    public function displayDataJson($data) {
-        echo json_encode($data,JSON_PRETTY_PRINT);
-    }
 }

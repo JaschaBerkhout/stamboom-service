@@ -47,12 +47,31 @@ function handleInsertUser($db){
     if ($db->insertUser($_POST)){
         $id = $db->getUserIdBasedOnEmail($_POST['email']);
             if($id !== FALSE){
-                print_r($id);
-                return;
-            } exit("Kon niet vinden!");
+                displayResponseAndExit(
+                    [
+                        'result'=>true,
+                        'user_id'=>$id
+                    ]
+                );
+            }
     }
-    exit("Kon niet toevoegen!");
+    displayResponseAndExit(
+        [
+            'result'=>false,
+            'user_id'=>null
+        ]
+    );
 
+}
+
+function displayResponseAndExit($data){
+
+    echo convertToJson($data);
+    exit;
+}
+
+function convertToJson($data){
+    return json_encode($data);
 }
 
 function displayPersonsFromUser($db,$presenter, $user_id) {
@@ -64,7 +83,7 @@ function displayPersonsFromUser($db,$presenter, $user_id) {
 
 function displayPersonsFromUserJson($db,$presenter,$user_id){
     $persons = $db->getPersonsPerUser($user_id);
-    $presenter->displayDataJson($persons);
+    echo convertToJson($persons);
 }
 
 function voerTestjesUit($db) {
