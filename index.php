@@ -8,8 +8,20 @@ use App\Tester;
 $db = new PersonsDatabase();
 $presenter = new Presenter();
 
+session_start();
+
+var_dump($_SESSION);
+
+
+var_dump($_SESSION);
+return;
 
 takeActionBasedOnType($db, $presenter);
+
+
+
+
+
 
 function takeActionBasedOnType($db, $presenter)
 {
@@ -27,49 +39,69 @@ function takeActionBasedOnType($db, $presenter)
     } elseif($type === "personen_json"){
         displayPersonsFromUserJson($db,$presenter,$_GET['user_id']);
     } elseif($type === "insert_person") {
-        if(!empty($_POST['user_id']) && is_numeric($_POST['user_id'])){
-        var_dump($db->insertPerson($_POST));
-        } else {
-            exit("LEEG zoals je toekomst");
-        }
+        handleInsertPerson($db);
     } elseif($type === "insert_user") {
         handleInsertUser($db);
     } elseif($type === "user_login") {
-        $db->matchEmailPassword($_POST['email']);
+        handleUserLogin($db);
     }
     else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
 }
 
+function handleInsertPerson($db)
+{
+    if (empty($_POST['user_id']) || !is_numeric($_POST['user_id'])) {
+        displayResponseAndExit(false,null,"LEEG zoals je toekomst");
+
+    }
+
+    $id = $db->insertPerson($_POST);
+
+    if ($id !== false) {
+        $persoon = $db->getPersonById($id, $_POST['user_id']);
+
+        if ($persoon !== FALSE) {
+            echo convertToJson(['result'=>true, 'data'=>$persoon]);
+            return;
+        }
+    }
+
+    displayResponseAndExit(false,null, 'Kon persoon niet toevoegen');
+}
+
+function handleUserLogin($db)
+{
+    $id = $db->getUserIdBasedOnEmailAndPassword($_POST['email'], $_POST['password']);
+    if($id === false) {
+        displayResponseAndExit(false, null, 'Geen user gevonden met deze gegevens');
+    }
+
+    displayResponseAndExit(true, $id);
+}
+
 function handleInsertUser($db){
     if (empty($_POST['email']) || empty($_POST['password'])) {
-        exit("LEEG zoals je toekomst");
+        displayResponseAndExit(false, null, 'Geen email of password meegegeven');
     }
 
     if ($db->insertUser($_POST)){
         $id = $db->getUserIdBasedOnEmail($_POST['email']);
             if($id !== FALSE){
-                displayResponseAndExit(
-                    [
-                        'result'=>true,
-                        'user_id'=>$id
-                    ]
-                );
+                displayResponseAndExit(true, $id);
             }
     }
-    displayResponseAndExit(
-        [
-            'result'=>false,
-            'user_id'=>null
-        ]
-    );
-
+    displayResponseAndExit(false,null, 'Kon user niet toevoegen');
 }
 
-function displayResponseAndExit($data){
+function displayResponseAndExit($result = false, $user_id = null, $message = 'Fout bij verwerken request'){
 
-    echo convertToJson($data);
+    echo convertToJson([
+        'result'=>$result,
+        'user_id'=>$user_id,
+        'message'=>$message
+    ]);
     exit;
 }
 
@@ -99,3 +131,4 @@ function voerTestjesUit($db) {
     $tester->testAddPersonWithoutDataGivesFalse();
     $tester->testPersonenVerwijderenVanUser();
 }
+

@@ -11,7 +11,7 @@ CREATE TABLE persons(
     l_name varchar(255) NOT NULL,
     gender varchar(1) NOT NULL,
     birthday date NOT NULL,
-    deathday date,
+    deathday date DEFAULT NULL,
     user_id integer NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

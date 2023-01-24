@@ -17,18 +17,16 @@ class PersonsDatabase {
 
     public function insertUser($new_user){
         if($this->getUserIdBasedOnEmail($new_user['email']) !== FALSE){
-
             return false;
         }
 
         $data = [
             'email' => $new_user['email'],
-            'user_name' => $new_user['user_name'],
             'password' => $new_user['password'],
         ];
 
 
-        $sql = "INSERT INTO users (email_address,user_name, password) VALUES (:email,:user_name,:password)";
+        $sql = "INSERT INTO users (email_address, password) VALUES (:email,:password)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($data);
 
@@ -69,19 +67,26 @@ class PersonsDatabase {
 
     }
 
-    public function matchEmailPassword($email){
-        $id = $this->getUserIdBasedOnEmail($email);
-        if ($id === false) {
-            exit("Email of wachtwoord incorrect.");
-        }
-        $stmt = $this->pdo->query("SELECT password FROM users WHERE email_address = '$email' LIMIT 1");
-        $result = $stmt->fetch();
+public function getPersonById($id, $user_id) {
+    $stmt = $this->pdo->query("SELECT * FROM persons WHERE id = '$id' and user_id = '$user_id' LIMIT 1");
 
-        if ($result[0] !== $_POST['password']) {
-            exit("Email of wachtwoord incorrect.");
+    $result = $stmt->fetch();
+    if($result === FALSE){
+        return FALSE;
+    }
+
+    return $result;
+
+}
+
+    public function getUserIdBasedOnEmailAndPassword($email,$password){
+        $stmt = $this->pdo->query("SELECT id FROM users WHERE password= '$password' AND email_address = '$email' LIMIT 1");
+        $result = $stmt->fetch();
+        if($result === FALSE){
+            return FALSE;
         }
-        echo "Inloggen gelukt.";
-        return convertToJson($id);
+
+        return $result['id'];
     }
 
 
@@ -98,7 +103,7 @@ class PersonsDatabase {
     {
         // @todo: add person validation
         if($person === null) {
-         return false;
+            return false;
         }
 
         $data = [
@@ -120,8 +125,7 @@ class PersonsDatabase {
             return false;
         }
     
-        
-        return true;
+        return $this->pdo->lastInsertId();
     }
 
     public function removePerson(int $id){
