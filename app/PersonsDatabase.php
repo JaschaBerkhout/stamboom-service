@@ -69,6 +69,22 @@ class PersonsDatabase {
 
     }
 
+    public function matchEmailPassword($email){
+        $id = $this->getUserIdBasedOnEmail($email);
+        if ($id === false) {
+            exit("Email of wachtwoord incorrect.");
+        }
+        $stmt = $this->pdo->query("SELECT password FROM users WHERE email_address = '$email' LIMIT 1");
+        $result = $stmt->fetch();
+
+        if ($result[0] !== $_POST['password']) {
+            exit("Email of wachtwoord incorrect.");
+        }
+        echo "Inloggen gelukt.";
+        return convertToJson($id);
+    }
+
+
     public function removeAllPersonsFromUser(int $user_id){
         $data = [
             'user_id' => $user_id,

@@ -34,7 +34,10 @@ function takeActionBasedOnType($db, $presenter)
         }
     } elseif($type === "insert_user") {
         handleInsertUser($db);
-    } else {
+    } elseif($type === "user_login") {
+        $db->matchEmailPassword($_POST['email']);
+    }
+    else {
         exit("Je hebt geen geldig type ingevuld jochie!");
     }
 }

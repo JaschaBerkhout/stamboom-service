@@ -133,3 +133,12 @@ function messageNewPersonCreated(persoon) {
     generalMessage(`${persoon.f_name} is toegevoegd aan de familie ${persoon.l_name}.`);
 };
 
+
+function showPassword() {
+    let password = document.getElementById("password");
+    if (password.type === "password") {
+        password.type = "text";
+    } else {
+        password.type = "password";
+    }
+}
