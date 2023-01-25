@@ -37,6 +37,10 @@ class App {
         }
     }
 
+    public function logOut(){
+        unset($_SESSION);
+    }
+
     public function getUserIdFromSession(): int
     {
         $this->requireLogin();
