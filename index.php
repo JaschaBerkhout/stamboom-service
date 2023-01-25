@@ -8,27 +8,17 @@ use App\Tester;
 $db = new PersonsDatabase();
 $presenter = new Presenter();
 
+if (session_status() === PHP_SESSION_NONE) {
 session_start();
-
-var_dump($_SESSION);
-
-
-var_dump($_SESSION);
-return;
+}
 
 takeActionBasedOnType($db, $presenter);
-
-
-
-
-
 
 function takeActionBasedOnType($db, $presenter)
 {
     $type = $_GET['type'];
     if ($type === 'users') {
-        $users = $db->getUsers();
-        $presenter->displayUsers($users);
+
     } elseif ($type === 'persons') {
         displayPersonsFromUser($db,$presenter, 1);
     } elseif ($type === 'relation_types') {
@@ -37,7 +27,7 @@ function takeActionBasedOnType($db, $presenter)
     } elseif($type === "testing") {
         voerTestjesUit($db);
     } elseif($type === "personen_json"){
-        displayPersonsFromUserJson($db,$presenter,$_GET['user_id']);
+        displayPersonsFromUserJson($db,$_GET['user_id']);
     } elseif($type === "insert_person") {
         handleInsertPerson($db);
     } elseif($type === "insert_user") {
@@ -50,8 +40,17 @@ function takeActionBasedOnType($db, $presenter)
     }
 }
 
-function handleInsertPerson($db)
-{
+function handleDisplayUsers(){
+    $users = $db->getUsers();
+    $presenter->displayUsers($users);
+}
+
+function isLoggedIn():bool{
+    return !empty($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+}
+
+function handleInsertPerson(PersonsDatabase $db){
+    requireLogin();
     if (empty($_POST['user_id']) || !is_numeric($_POST['user_id'])) {
         displayResponseAndExit(false,null,"LEEG zoals je toekomst");
 
@@ -60,10 +59,10 @@ function handleInsertPerson($db)
     $id = $db->insertPerson($_POST);
 
     if ($id !== false) {
-        $persoon = $db->getPersonById($id, $_POST['user_id']);
+        $person = $db->getPersonById($id, $_POST['user_id']);
 
-        if ($persoon !== FALSE) {
-            echo convertToJson(['result'=>true, 'data'=>$persoon]);
+        if ($person !== FALSE) {
+            echo convertToJson(['result'=>true, 'data'=>$person]);
             return;
         }
     }
@@ -71,17 +70,23 @@ function handleInsertPerson($db)
     displayResponseAndExit(false,null, 'Kon persoon niet toevoegen');
 }
 
-function handleUserLogin($db)
-{
+function handleUserLogin(PersonsDatabase $db){
     $id = $db->getUserIdBasedOnEmailAndPassword($_POST['email'], $_POST['password']);
+
     if($id === false) {
+
         displayResponseAndExit(false, null, 'Geen user gevonden met deze gegevens');
     }
 
-    displayResponseAndExit(true, $id);
+    $_SESSION['user_id']=$id;
+    $_SESSION['logged_in']=true;
+
+    displayResponseAndExit(true, $id,'Log in gelukt');
+
 }
 
-function handleInsertUser($db){
+
+function handleInsertUser(PersonsDatabase $db){
     if (empty($_POST['email']) || empty($_POST['password'])) {
         displayResponseAndExit(false, null, 'Geen email of password meegegeven');
     }
@@ -102,26 +107,34 @@ function displayResponseAndExit($result = false, $user_id = null, $message = 'Fo
         'user_id'=>$user_id,
         'message'=>$message
     ]);
+
     exit;
 }
 
-function convertToJson($data){
+function convertToJson(mixed $data):false | string{
     return json_encode($data);
 }
 
-function displayPersonsFromUser($db,$presenter, $user_id) {
+function displayPersonsFromUser(PersonsDatabase $db,$presenter, $user_id) {
+    requireLogin();
     $persons = $db->getPersonsPerUser($user_id);
     echo "<br>";
     echo "Displaying persons from user $user_id";
     $presenter->displayPersons($persons);
 }
 
-function displayPersonsFromUserJson($db,$presenter,$user_id){
+function displayPersonsFromUserJson(PersonsDatabase $db,$user_id){
+    requireLogin();
     $persons = $db->getPersonsPerUser($user_id);
     echo convertToJson($persons);
 }
 
-function voerTestjesUit($db) {
+function requireLogin():void{
+    if(!isLoggedIn()) {
+        exit("Niet ingelogd");
+    }
+}
+function voerTestjesUit(PersonsDatabase $db) {
     echo "<HR> TEST ZONE <HR>";
     $tester = new Tester($db);
     $tester->testInsertValidRelationship();

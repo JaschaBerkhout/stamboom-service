@@ -111,7 +111,7 @@ public function getPersonById($id, $user_id) {
             'l_name' => $person['l_name'],
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
-            'deathday' => $person['deathday'] ?? null, //fix dit.
+            'deathday' => $person['deathday'] ?? null,
             'user_id' => $person['user_id'], // later automatisch opvragen
         ];        
 
@@ -128,7 +128,7 @@ public function getPersonById($id, $user_id) {
         return $this->pdo->lastInsertId();
     }
 
-    public function removePerson(int $id){
+    public function removePerson(int $id):void{
         $data = [
             'id' => $id,
         ];
@@ -137,7 +137,7 @@ public function getPersonById($id, $user_id) {
         $stmt->execute($data);
     }
 
-    public function getPersonsPerUser(int $user_id){
+    public function getPersonsPerUser(int $user_id):array{
         $stmt = $this->pdo->query("SELECT * FROM persons WHERE user_id = $user_id");
         $persons = [];
         while ($row = $stmt->fetch()) {
@@ -169,9 +169,7 @@ public function getPersonById($id, $user_id) {
         ];
         $sql = "INSERT INTO relations (relation_type_id, person1, person2) VALUES (:relation_type_id, :person1, :person2)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
-
-        return true;
+        return $stmt->execute($data);
 
     }
 

@@ -7,13 +7,6 @@ body {
     
 }
 
-.form {
-    max-width: 50%;
-}
-
-form>input {
-    border-radius: 3px;
-}
 
 .personen {
     margin-top: 12px;
@@ -32,25 +25,34 @@ form>input {
     margin-left: 5px;
     margin-right: 5px;
 }
-.dropdown-menu {
-    padding: 5px;
-}
 
 form {
     margin: 5px;
 }
 
-.login {
-    text-align: end;
-}
 
 .button {
     background-color:transparent;
     border-radius: 5px;
-    color:#6B705C;
+    color: #6b705c;
     text-align: center;
+    padding: 10px;
+    border-color: #6b705c;
+}
+.button:hover{
+    background-color: #6b705c;
+    color: white;
+    border-color: #6b705c;
+}
+.form-check-input{
+    background-color:transparent;
+    border-color: #6b705c;
 }
 
+.form-check-input:checked{
+    background-color: #6b705c;
+    border-color: #6b705c;
+}
 
 
 

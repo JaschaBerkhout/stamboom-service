@@ -1,7 +1,6 @@
 CREATE TABLE users(
     id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     email_address varchar(255) NOT NULL,
-    user_name varchar(255),
     password varchar(255) NOT NULL
 );
 
@@ -32,20 +31,9 @@ CREATE TABLE relations(
     FOREIGN KEY (relation_type_id) REFERENCES relations_types(relation_type_id)
 );
 
-INSERT INTO users(user_name,password)
-    values ('Jascha','LekkerWachtwoordje23!');
 
 INSERT INTO persons (f_name,l_name,gender,birthday,user_id)
     values ('Jascha','Berkhout','f','16-02-1995',1);
-
-INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
-    values ('Dunja','Berkhout','f','26-05-1997',1);
-
-INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
-    values ('Marry','van de Ruit','f','14-12-1969',1);
-
-INSERT INTO persons(f_name,l_name,gender,birthday,user_id)
-    values ('Tannetje Margaretha Wilhelmina','Schwier','f','31-08-1994',1);
 
 INSERT INTO relations_types(relation_type)
     VALUES ('Married'),('Parent'),('Relationship');
@@ -78,8 +66,4 @@ left join persons p on r.person1 = p.id
     join persons p2 on r.person2 = p2.id
 left join relations_types rt on r.relation_type_id = rt.relation_type_id;
 
-select * from relation_types;
 
-insert into users (email_address, user_name, password) VALUES ('test@test.com','Test','LekkerTesten');
-
-SELECT id FROM users WHERE email_address = 'jaschaberkhout95@gmail.com';

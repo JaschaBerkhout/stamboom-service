@@ -3,9 +3,9 @@ namespace App;
 
 class Tester {
 
-    private $db;
+    private PersonsDatabase $db;
 
-    public function __construct($db) {
+    public function __construct(PersonsDatabase $db) {
         $this->db = $db;
     }
 
@@ -18,7 +18,7 @@ class Tester {
         echo $resultaat === $verwachting ? "Test is gelukt" : "Test is niet gelukt!";
     }
 
-    private function testPersoon($user_id = 70, $deathday = null){
+    private function testPersoon($deathday = null, $user_id = 70){
        return [
             'f_name' => 'voornaam',
             'l_name' => 'l_name',
@@ -78,17 +78,15 @@ class Tester {
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getLevendPersoon();
         $resultaat = $this->db->insertPerson($test_persoon);
-        $verwachting = true;
-        $this->expectCertainResult($resultaat,$verwachting);
+        $this->expectCertainResult($resultaat,true);
     }
 
     // wat gebeurt er als je een persoon toevoegt met een deathday
     public function testAddPersonWithDeathday(){
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getDooie();
-        $resultaat = $this->db->insertPerson($test_persoon); 
-        $verwachting = true;
-        $this->expectCertainResult($resultaat,$verwachting);
+        $resultaat = $this->db->insertPerson($test_persoon);
+        $this->expectCertainResult($resultaat,true);
     }
 
 
