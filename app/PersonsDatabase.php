@@ -112,7 +112,7 @@ public function getPersonById($id, $user_id) {
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
             'deathday' => $person['deathday'] ?? null,
-            'user_id' => $person['user_id'], // later automatisch opvragen
+            'user_id' => $person['user_id'], // later automatisch opvragen getUserIdFromSession()
         ];        
 
         $sql = "INSERT INTO persons (f_name, l_name, gender,birthday,deathday,user_id) VALUES (:f_name, :l_name, :gender,:birthday,:deathday, :user_id)";
