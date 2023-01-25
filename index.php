@@ -14,7 +14,7 @@ session_start();
 
 takeActionBasedOnType($db, $presenter);
 
-function takeActionBasedOnType($db, $presenter)
+function takeActionBasedOnType(PersonsDatabase $db, $presenter)
 {
     $type = $_GET['type'];
     if ($type === 'users') {
@@ -39,12 +39,18 @@ function takeActionBasedOnType($db, $presenter)
     }
 }
 
-function handleDisplayUsers($db,$presenter){
+function getUserIdFromSession():int{
+    requireLogin();
+    return $_SESSION['user_id'];
+}
+
+
+function handleDisplayUsers(PersonsDatabase $db,$presenter){
     $users = $db->getUsers();
     $presenter->displayUsers($users);
 }
 
-function handleDisplayRelationTypes($db,$presenter){
+function handleDisplayRelationTypes(PersonsDatabase $db,$presenter){
     $relation_types = $db->getAllRelationTypes();
     $presenter->displayRelationTypes($relation_types);
 }
