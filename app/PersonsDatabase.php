@@ -112,8 +112,8 @@ public function getPersonById($id, $user_id) {
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
             'deathday' => $person['deathday'] ?? null,
-            'user_id' => $person['user_id'], // later automatisch opvragen getUserIdFromSession()
-        ];        
+            'user_id' => $_SESSION['user_id'], // kon getUserIdFromSession() hier niet gebruiken?
+        ];
 
         $sql = "INSERT INTO persons (f_name, l_name, gender,birthday,deathday,user_id) VALUES (:f_name, :l_name, :gender,:birthday,:deathday, :user_id)";
         
@@ -148,7 +148,7 @@ public function getPersonById($id, $user_id) {
                 'gender' => $row['gender'],
                 'birthday' => $row['birthday'],
                 'deathday' => $row['deathday'],
-                'user_id' => $row['user_id'], // later automatisch opvragen
+                'user_id' => $row['user_id'],
             ];
             $persons[] = $person;
         }

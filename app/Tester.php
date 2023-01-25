@@ -108,7 +108,7 @@ class Tester {
         $this->db->insertPerson($this->getLevendPersoon());
         
         // acteren
-        $this->db->removeAllPersonsFromUser(70);
+        $this->db->removeAllPersonsFromUser();
         
         // assertief zijn
         $aantalPersonenPerUser = count($this->db->getPersonsPerUser(70));
