@@ -18,12 +18,11 @@ function takeActionBasedOnType($db, $presenter)
 {
     $type = $_GET['type'];
     if ($type === 'users') {
-
+        handleDisplayUsers($db,$presenter);
     } elseif ($type === 'persons') {
         displayPersonsFromUser($db,$presenter, 1);
     } elseif ($type === 'relation_types') {
-        $relation_types = $db->getAllRelationTypes();
-        $presenter->displayRelationTypes($relation_types);
+        handleDisplayRelationTypes($db,$presenter);
     } elseif($type === "testing") {
         voerTestjesUit($db);
     } elseif($type === "personen_json"){
@@ -40,9 +39,14 @@ function takeActionBasedOnType($db, $presenter)
     }
 }
 
-function handleDisplayUsers(){
+function handleDisplayUsers($db,$presenter){
     $users = $db->getUsers();
     $presenter->displayUsers($users);
+}
+
+function handleDisplayRelationTypes($db,$presenter){
+    $relation_types = $db->getAllRelationTypes();
+    $presenter->displayRelationTypes($relation_types);
 }
 
 function isLoggedIn():bool{
