@@ -45,12 +45,11 @@ class PersonsDatabase {
 
     public function getUsers(): array
     {
-        $stmt = $this->pdo->query("SELECT id,email_address, user_name FROM users");
+        $stmt = $this->pdo->query("SELECT id,email_address FROM users");
         $user = [];
         while ($row = $stmt->fetch()) {
             $person = [
                 'id' => $row['id'],
-                'user_name' => $row['user_name'],
                 'email_address' => $row['email_address'],
             ];
             $user[] = $person;

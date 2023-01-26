@@ -24,7 +24,7 @@ class App {
         } elseif ($type === 'relation_types') {
             $this->handleDisplayRelationTypes($db, $presenter);
         } elseif ($type === "testing") {
-            $this->voerTestjesUit($db);
+            // voerTestjesUit($db);
         } elseif ($type === "persons_json") {
             $this->displayPersonsFromUserJson($db);
         } elseif ($type === "insert_person") {
@@ -158,18 +158,6 @@ class App {
         if (!$this->isLoggedIn()) {
             exit("Niet ingelogd");
         }
-    }
-
-    public function voerTestjesUit(PersonsDatabase $db): void
-    {
-        echo "<HR> TEST ZONE <HR>";
-        $tester = new Tester($db);
-        $tester->testInsertValidRelationship();
-        $tester->testInsertInvalidRelationship();
-        $tester->testAddPersonWithoutDeathday();
-        $tester->testAddPersonWithDeathday();
-        $tester->testAddPersonWithoutDataGivesFalse();
-        $tester->testPersonenVerwijderenVanUser();
     }
 
 }

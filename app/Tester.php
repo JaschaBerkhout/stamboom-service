@@ -20,13 +20,13 @@ class Tester {
         echo $resultaat === $verwachting ? "Test is gelukt" : "Test is niet gelukt!";
     }
 
-    private function testPersoon(int $deathday = null, int $user_id = 70): array
+    private function testPersoon(mixed $deathday = null, int $user_id = 2): array
     {
        return [
             'f_name' => 'voornaam',
-            'l_name' => 'l_name',
-            'gender' => 'gender',
-            'birthday' => 'birthday',
+            'l_name' => 'achternaam',
+            'gender' => 'm/f',
+            'birthday' => '01-01-2000',
             'deathday' => $deathday,
             'user_id' => $user_id,
         ];
@@ -47,8 +47,7 @@ class Tester {
     {
         $this->laatTestNaamZien(__METHOD__);
         $resultaat = $this->db->insertRelationship(2, 43, 2);
-        $verwachting = true;
-        $this->expectCertainResult($resultaat, $verwachting);
+        $this->expectCertainResult($resultaat, true);
     }
 
 // wat gebeurt er als je een relatie toevoegt van een type die NIET bestaat
@@ -96,7 +95,7 @@ class Tester {
         $this->db->insertPerson($this->getLevendPersoon());
         
         // acteren
-        $this->db->removeAllPersonsFromUser();
+        $this->db->removeAllPersonsFromUser(2);
         
         // assertief zijn
         $aantalPersonenPerUser = count($this->db->getPersonsPerUser(70));
