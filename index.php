@@ -20,15 +20,5 @@ session_start();
 
 $app->takeActionBasedOnType($db, $presenter);
 
-function voerTestjesUit(PersonsDatabase $db): void
-{
-    echo "<HR> TEST ZONE <HR>";
-    $tester = new Tester($db);
-    $tester->testInsertValidRelationship();
-    $tester->testInsertInvalidRelationship();
-    $tester->testAddPersonWithoutDeathday();
-    $tester->testAddPersonWithDeathday();
-    $tester->testAddPersonWithoutDataGivesFalse();
-    $tester->testPersonenVerwijderenVanUser();
-}
+
 

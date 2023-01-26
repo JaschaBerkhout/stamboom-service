@@ -14,25 +14,25 @@ class App {
         $this->presenter = $presenter;
     }
 
-    public function takeActionBasedOnType($db, $presenter): void
+    public function takeActionBasedOnType(): void
     {
         $type = $_GET['type'];
         if ($type === 'users') {
-            $this->handleDisplayUsers($db, $presenter);
+            $this->handleDisplayUsers();
         } elseif ($type === 'persons') {
-            $this->displayPersonsFromUser($db, $presenter);
+            $this->displayPersonsFromUser();
         } elseif ($type === 'relation_types') {
-            $this->handleDisplayRelationTypes($db, $presenter);
+            $this->handleDisplayRelationTypes();
         } elseif ($type === "testing") {
-            // voerTestjesUit($db);
+            $this->voerTestjesUit();
         } elseif ($type === "persons_json") {
-            $this->displayPersonsFromUserJson($db);
+            $this->displayPersonsFromUserJson();
         } elseif ($type === "insert_person") {
-            $this->handleInsertPerson($db);
+            $this->handleInsertPerson();
         } elseif ($type === "insert_user") {
-            $this->handleInsertUser($db);
+            $this->handleInsertUser();
         } elseif ($type === "user_login") {
-            $this->handleUserLogin($db);
+            $this->handleUserLogin();
         } else {
             exit("Je hebt geen geldig type ingevuld jochie!");
         }
@@ -49,16 +49,16 @@ class App {
     }
 
 
-    private function handleDisplayUsers(PersonsDatabase $db, Presenter $presenter): void
+    private function handleDisplayUsers(): void
     {
-        $users = $db->getUsers();
-        $presenter->displayUsers($users);
+        $users = $this->db->getUsers();
+        $this->presenter->displayUsers($users);
     }
 
-    private function handleDisplayRelationTypes(PersonsDatabase $db, $presenter): void
+    private function handleDisplayRelationTypes(): void
     {
-        $relation_types = $db->getAllRelationTypes();
-        $presenter->displayRelationTypes($relation_types);
+        $relation_types = $this->db->getAllRelationTypes();
+        $this->presenter->displayRelationTypes($relation_types);
     }
 
     public function isLoggedIn(): bool
@@ -66,7 +66,7 @@ class App {
         return !empty($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
 
-    private function handleInsertPerson(PersonsDatabase $db): void
+    private function handleInsertPerson(): void
     {
         $this->requireLogin();
         if (empty($this->getUserIdFromSession()) || !is_numeric($this->getUserIdFromSession())) {
@@ -74,10 +74,10 @@ class App {
 
         }
 
-        $id = $db->insertPerson($_POST);
+        $id = $this->db->insertPerson($_POST);
 
         if ($id !== false) {
-            $person = $db->getPersonById($id, $this->getUserIdFromSession());
+            $person = $this->db->getPersonById($id, $this->getUserIdFromSession());
 
             if ($person !== FALSE) {
                 echo $this->convertToJson(['result' => true, 'data' => $person]);
@@ -88,9 +88,9 @@ class App {
         $this->displayResponseAndExit(false, null, 'Kon persoon niet toevoegen');
     }
 
-    private function handleUserLogin(PersonsDatabase $db): void
+    private function handleUserLogin(): void
     {
-        $id = $db->getUserIdBasedOnEmailAndPassword($_POST['email'], $_POST['password']);
+        $id = $this->db->getUserIdBasedOnEmailAndPassword($_POST['email'], $_POST['password']);
 
         if ($id === false) {
 
@@ -105,14 +105,14 @@ class App {
     }
 
 
-    private function handleInsertUser(PersonsDatabase $db): void //?
+    private function handleInsertUser(): void //?
     {
         if (empty($_POST['email']) || empty($_POST['password'])) {
             $this->displayResponseAndExit(false, null, 'Geen email of password meegegeven');
         }
 
-        if ($db->insertUser($_POST)) {
-            $id = $db->getUserIdBasedOnEmail($_POST['email']);
+        if ($this->db->insertUser($_POST)) {
+            $id = $this->db->getUserIdBasedOnEmail($_POST['email']);
             if ($id !== FALSE) {
                 $this->displayResponseAndExit(true, $id);
             }
@@ -137,19 +137,19 @@ class App {
         return json_encode($data);
     }
 
-    public function displayPersonsFromUser(PersonsDatabase $db, Presenter $presenter): void//twijfel?
+    public function displayPersonsFromUser(): void//twijfel?
     {
         $this->requireLogin();
-        $persons = $db->getPersonsPerUser($this->getUserIdFromSession());
+        $persons = $this->db->getPersonsPerUser($this->getUserIdFromSession());
         echo "<br>";
         echo "Displaying persons from user ". $this->getUserIdFromSession();
-        $presenter->displayPersons($persons);
+        $this->presenter->displayPersons($persons);
     }
 
-    public function displayPersonsFromUserJson(PersonsDatabase $db): void
+    public function displayPersonsFromUserJson(): void
     {
         $this->requireLogin();
-        $persons = $db->getPersonsPerUser($this->getUserIdFromSession());
+        $persons = $this->db->getPersonsPerUser($this->getUserIdFromSession());
         echo $this->convertToJson($persons);
     }
 
@@ -158,6 +158,18 @@ class App {
         if (!$this->isLoggedIn()) {
             exit("Niet ingelogd");
         }
+    }
+
+    function voerTestjesUit(): void
+    {
+        echo "<HR> TEST ZONE <HR>";
+        $tester = new Tester($this->db);
+        $tester->testInsertValidRelationship();
+        $tester->testInsertInvalidRelationship();
+        $tester->testAddPersonWithoutDeathday();
+        $tester->testAddPersonWithDeathday();
+        $tester->testAddPersonWithoutDataGivesFalse();
+        $tester->testPersonenVerwijderenVanUser();
     }
 
 }
