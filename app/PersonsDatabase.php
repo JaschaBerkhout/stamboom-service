@@ -15,7 +15,8 @@ class PersonsDatabase {
         // echo json_encode($data);
     }
 
-    public function insertUser($new_user){
+    public function insertUser(mixed $new_user): bool //twijfel over mixed
+    {
         if($this->getUserIdBasedOnEmail($new_user['email']) !== FALSE){
             return false;
         }
@@ -32,7 +33,8 @@ class PersonsDatabase {
 
     }
 
-    public function removeUser(int $id){
+    public function removeUser(int $id): void
+    {
         $data = [
             'id' => $id,
         ];
@@ -41,7 +43,8 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function getUsers() {
+    public function getUsers(): array
+    {
         $stmt = $this->pdo->query("SELECT id,email_address, user_name FROM users");
         $user = [];
         while ($row = $stmt->fetch()) {
@@ -56,7 +59,8 @@ class PersonsDatabase {
         return $user;
     }
 
-    public function getUserIdBasedOnEmail($email){
+    public function getUserIdBasedOnEmail(string $email): false|string // hij gaf dit als optie, waarom is hij rood?
+    {
         $stmt = $this->pdo->query("SELECT id FROM users WHERE email_address = '$email' LIMIT 1");
         $result = $stmt->fetch();
         if($result === FALSE){
@@ -67,19 +71,21 @@ class PersonsDatabase {
 
     }
 
-public function getPersonById($id, $user_id) {
-    $stmt = $this->pdo->query("SELECT * FROM persons WHERE id = '$id' and user_id = '$user_id' LIMIT 1");
+    public function getPersonById(int $id, int $user_id): false|array
+    {
+        $stmt = $this->pdo->query("SELECT * FROM persons WHERE id = '$id' and user_id = '$user_id' LIMIT 1");
 
-    $result = $stmt->fetch();
-    if($result === FALSE){
-        return FALSE;
+        $result = $stmt->fetch();
+        if($result === FALSE){
+            return FALSE;
+        }
+
+        return $result;
+
     }
 
-    return $result;
-
-}
-
-    public function getUserIdBasedOnEmailAndPassword($email,$password){
+    public function getUserIdBasedOnEmailAndPassword(string $email, string $password): false|string
+    {
         $stmt = $this->pdo->query("SELECT id FROM users WHERE password= '$password' AND email_address = '$email' LIMIT 1");
         $result = $stmt->fetch();
         if($result === FALSE){
@@ -90,7 +96,8 @@ public function getPersonById($id, $user_id) {
     }
 
 
-    public function removeAllPersonsFromUser(int $user_id){
+    public function removeAllPersonsFromUser(int $user_id): void
+    {
         $data = [
             'user_id' => $user_id,
         ];
@@ -99,7 +106,7 @@ public function getPersonById($id, $user_id) {
         $stmt->execute($data);
     }
 
-    public function insertPerson($person)
+    public function insertPerson(mixed $person): false|string
     {
         // @todo: add person validation
         if($person === null) {
@@ -128,7 +135,8 @@ public function getPersonById($id, $user_id) {
         return $this->pdo->lastInsertId();
     }
 
-    public function removePerson(int $id):void{
+    public function removePerson(int $id): void
+    {
         $data = [
             'id' => $id,
         ];
@@ -137,7 +145,8 @@ public function getPersonById($id, $user_id) {
         $stmt->execute($data);
     }
 
-    public function getPersonsPerUser(int $user_id):array{
+    public function getPersonsPerUser(int $user_id): array
+    {
         $stmt = $this->pdo->query("SELECT * FROM persons WHERE user_id = $user_id");
         $persons = [];
         while ($row = $stmt->fetch()) {
@@ -155,7 +164,8 @@ public function getPersonById($id, $user_id) {
         return $persons;
     }
 
-    public function insertRelationship(int $relation_type_id, int $person1, int $person2){
+    public function insertRelationship(int $relation_type_id, int $person1, int $person2): bool
+    {
 
         if(!$this->isValidRelationshipId($relation_type_id)){
             echo "\n Relationship type not found.\n";
@@ -173,14 +183,16 @@ public function getPersonById($id, $user_id) {
 
     }
 
-    private function isValidRelationshipId($id){
+    private function isValidRelationshipId(int $id): bool
+    {
         $relation_types = $this->getAllRelationTypes();
         $relation_type_ids = array_column($relation_types, 'relation_type_id');
 
         return in_array($id, $relation_type_ids);
     }
 
-    private function isValidRelationshipIdLoop($id){
+    private function isValidRelationshipIdLoop(int $id)
+    {
         $relation_types = $this->getAllRelationTypes();
         foreach($relation_types as $relation_type_array){
             if($relation_type_array['relation_type_id'] == $id){
@@ -191,7 +203,8 @@ public function getPersonById($id, $user_id) {
         }
     }
 
-    public function insertDeathday($id,$deathday){
+    public function insertDeathday(int $id,mixed $deathday): void
+    {
         $data = [
             'id' => $id,
             'deathday' => $deathday,
@@ -202,7 +215,8 @@ public function getPersonById($id, $user_id) {
         $stmt->execute($data);
     }
 
-    public function getAllRelationTypes(){
+    public function getAllRelationTypes(): array
+    {
         $stmt = $this->pdo->query("SELECT * FROM relation_types");
         $relation_types = [];
         while ($row = $stmt->fetch()) {

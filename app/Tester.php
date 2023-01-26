@@ -10,15 +10,18 @@ class Tester {
     }
 
     
-    private function laatTestNaamZien($test_naam) {
+    private function laatTestNaamZien(string $test_naam): void
+    {
         echo "<br> ". $test_naam . " : ";
     }
     
-    private function expectCertainResult($resultaat, $verwachting) {
+    private function expectCertainResult($resultaat, $verwachting): void
+    {
         echo $resultaat === $verwachting ? "Test is gelukt" : "Test is niet gelukt!";
     }
 
-    private function testPersoon($deathday = null, $user_id = 70){
+    private function testPersoon(int $deathday = null, int $user_id = 70): array
+    {
        return [
             'f_name' => 'voornaam',
             'l_name' => 'l_name',
@@ -29,16 +32,19 @@ class Tester {
         ];
     }
 
-    private function getLevendPersoon() {
+    private function getLevendPersoon(): array
+    {
         return $this->testPersoon();
     }
-    private function getDooie() {
+    private function getDooie(): array
+    {
         return $this->testPersoon('01-01-2023');
     }
 
 
 // wat gebeurt er als je een relatie toevoegt van een type die bestaat
-    public function testInsertValidRelationship() {
+    public function testInsertValidRelationship(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
         $resultaat = $this->db->insertRelationship(2, 43, 2);
         $verwachting = true;
@@ -46,35 +52,26 @@ class Tester {
     }
 
 // wat gebeurt er als je een relatie toevoegt van een type die NIET bestaat
-    public function testInsertInvalidRelationship() {
+    public function testInsertInvalidRelationship(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
         $resultaat = $this->db->insertRelationship(21298, 43, 2);
         $verwachting = false;
         $this->expectCertainResult($resultaat, $verwachting);
     }
 
-
-        // @todo: try catch
-
-        // verwacht foutmelding
-    
-
-    // schrijf nog meer testjes!
     // wat gebeurt er als je een persoon toevoegt ZONDER een deathday
    
-    public function testAddPersonWithoutDataGivesFalse() {
-        
-        // wat test je?
-        
-        // wat wil je hebbeN?
+    public function testAddPersonWithoutDataGivesFalse(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
         $resultaat = $this->db->insertPerson(null);
 
         $this->expectCertainResult($resultaat,false);
     }
 
-
-    public function testAddPersonWithoutDeathday(){
+    public function testAddPersonWithoutDeathday(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getLevendPersoon();
         $resultaat = $this->db->insertPerson($test_persoon);
@@ -82,7 +79,8 @@ class Tester {
     }
 
     // wat gebeurt er als je een persoon toevoegt met een deathday
-    public function testAddPersonWithDeathday(){
+    public function testAddPersonWithDeathday(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getDooie();
         $resultaat = $this->db->insertPerson($test_persoon);
@@ -90,18 +88,8 @@ class Tester {
     }
 
 
-    // zou dit beter werken dan losse array in de test? Die werkte niet. 
-
-    // we willen ook nog testen:
-
-
-    // gebruik in voorbereiding de toevoeg functie
-    // wil testen: persoon verwijderen > die hiervoor zijn toegevoegd
-
-    // resultaat true
-    // eind restulaat check of alle personen uit zijn, is persons van user x leeg    
-
-    public function testPersonenVerwijderenVanUser(){
+    public function testPersonenVerwijderenVanUser(): void
+    {
         $this->laatTestNaamZien(__METHOD__);
 
         // arrangeren

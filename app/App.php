@@ -3,7 +3,7 @@ namespace App;
 
 if (session_status() === PHP_SESSION_NONE)
 {
-    session_start();
+    session_start();  // hier of daar?
 }
 class App {
     private PersonsDatabase $db;
@@ -14,7 +14,8 @@ class App {
         $this->presenter = $presenter;
     }
 
-    public function takeActionBasedOnType($db, $presenter){
+    public function takeActionBasedOnType($db, $presenter): void
+    {
         $type = $_GET['type'];
         if ($type === 'users') {
             $this->handleDisplayUsers($db, $presenter);
@@ -37,7 +38,7 @@ class App {
         }
     }
 
-    public function logOut(){
+    public function logOut(): void{
         unset($_SESSION);
     }
 
@@ -48,13 +49,13 @@ class App {
     }
 
 
-    private function handleDisplayUsers(PersonsDatabase $db, Presenter $presenter)
+    private function handleDisplayUsers(PersonsDatabase $db, Presenter $presenter): void
     {
         $users = $db->getUsers();
         $presenter->displayUsers($users);
     }
 
-    private function handleDisplayRelationTypes(PersonsDatabase $db, $presenter)
+    private function handleDisplayRelationTypes(PersonsDatabase $db, $presenter): void
     {
         $relation_types = $db->getAllRelationTypes();
         $presenter->displayRelationTypes($relation_types);
@@ -65,7 +66,7 @@ class App {
         return !empty($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
 
-    private function handleInsertPerson(PersonsDatabase $db)
+    private function handleInsertPerson(PersonsDatabase $db): void
     {
         $this->requireLogin();
         if (empty($this->getUserIdFromSession()) || !is_numeric($this->getUserIdFromSession())) {
@@ -87,7 +88,7 @@ class App {
         $this->displayResponseAndExit(false, null, 'Kon persoon niet toevoegen');
     }
 
-    private function handleUserLogin(PersonsDatabase $db)
+    private function handleUserLogin(PersonsDatabase $db): void
     {
         $id = $db->getUserIdBasedOnEmailAndPassword($_POST['email'], $_POST['password']);
 
@@ -104,7 +105,7 @@ class App {
     }
 
 
-    private function handleInsertUser(PersonsDatabase $db)
+    private function handleInsertUser(PersonsDatabase $db): void //?
     {
         if (empty($_POST['email']) || empty($_POST['password'])) {
             $this->displayResponseAndExit(false, null, 'Geen email of password meegegeven');
@@ -119,7 +120,7 @@ class App {
         $this->displayResponseAndExit(false, null, 'Kon user niet toevoegen');
     }
 
-    public function displayResponseAndExit($result = false, $user_id = null, $message = 'Fout bij verwerken request')
+    public function displayResponseAndExit(bool $result = false, int $user_id = null, string $message = 'Fout bij verwerken request'): array
     {
 
         echo $this->convertToJson([
@@ -136,7 +137,7 @@ class App {
         return json_encode($data);
     }
 
-    public function displayPersonsFromUser(PersonsDatabase $db, Presenter $presenter)
+    public function displayPersonsFromUser(PersonsDatabase $db, Presenter $presenter): void//twijfel?
     {
         $this->requireLogin();
         $persons = $db->getPersonsPerUser($this->getUserIdFromSession());
@@ -145,7 +146,7 @@ class App {
         $presenter->displayPersons($persons);
     }
 
-    public function displayPersonsFromUserJson(PersonsDatabase $db)
+    public function displayPersonsFromUserJson(PersonsDatabase $db): void
     {
         $this->requireLogin();
         $persons = $db->getPersonsPerUser($this->getUserIdFromSession());
@@ -159,7 +160,7 @@ class App {
         }
     }
 
-    public function voerTestjesUit(PersonsDatabase $db)
+    public function voerTestjesUit(PersonsDatabase $db): void
     {
         echo "<HR> TEST ZONE <HR>";
         $tester = new Tester($db);
