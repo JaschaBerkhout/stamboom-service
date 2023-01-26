@@ -105,7 +105,7 @@ class PersonsDatabase {
         $stmt->execute($data);
     }
 
-    public function insertPerson(mixed $person): false|string
+    public function insertPerson(mixed $person, int $user_id): false|string
     {
         // @todo: add person validation
         if($person === null) {
@@ -118,7 +118,7 @@ class PersonsDatabase {
             'gender' => $person['gender'],
             'birthday' => $person['birthday'],
             'deathday' => $person['deathday'] ?? null,
-            'user_id' => $_SESSION['user_id'], // kon getUserIdFromSession() hier niet gebruiken?
+            'user_id' => $user_id,
         ];
 
         $sql = "INSERT INTO persons (f_name, l_name, gender,birthday,deathday,user_id) VALUES (:f_name, :l_name, :gender,:birthday,:deathday, :user_id)";
@@ -156,7 +156,7 @@ class PersonsDatabase {
                 'gender' => $row['gender'],
                 'birthday' => $row['birthday'],
                 'deathday' => $row['deathday'],
-                'user_id' => $row['user_id'],
+                'user_id' => $user_id,
             ];
             $persons[] = $person;
         }
