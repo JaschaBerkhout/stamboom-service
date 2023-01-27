@@ -18,7 +18,7 @@ if (session_status() === PHP_SESSION_NONE) {
 session_start();
 }
 
-$app->takeActionBasedOnType($db, $presenter);
+$app->takeActionBasedOnType();
 
 
 

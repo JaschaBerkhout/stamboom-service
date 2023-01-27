@@ -7,6 +7,12 @@ class Tester {
 
     public function __construct(PersonsDatabase $db) {
         $this->db = $db;
+        $this->testAddPersonWithoutDataGivesFalse();
+        $this->testAddPersonWithDeathday();
+        $this->testAddPersonWithoutDeathday();
+        $this->testInsertInvalidRelationship();
+        $this->testInsertValidRelationship();
+        $this->testPersonenVerwijderenVanUser();
     }
 
     
@@ -64,7 +70,7 @@ class Tester {
     public function testAddPersonWithoutDataGivesFalse(): void
     {
         $this->laatTestNaamZien(__METHOD__);
-        $resultaat = $this->db->insertPerson(null);
+        $resultaat = $this->db->insertPerson(null,2);
 
         $this->expectCertainResult($resultaat,false);
     }
@@ -73,7 +79,7 @@ class Tester {
     {
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getLevendPersoon();
-        $resultaat = $this->db->insertPerson($test_persoon);
+        $resultaat = $this->db->insertPerson($test_persoon,2);
         $this->expectCertainResult($resultaat,true);
     }
 
@@ -82,7 +88,7 @@ class Tester {
     {
         $this->laatTestNaamZien(__METHOD__);
         $test_persoon = $this->getDooie();
-        $resultaat = $this->db->insertPerson($test_persoon);
+        $resultaat = $this->db->insertPerson($test_persoon,2);
         $this->expectCertainResult($resultaat,true);
     }
 
@@ -92,7 +98,7 @@ class Tester {
         $this->laatTestNaamZien(__METHOD__);
 
         // arrangeren
-        $this->db->insertPerson($this->getLevendPersoon());
+        $this->db->insertPerson($this->getLevendPersoon(),2);
         
         // acteren
         $this->db->removeAllPersonsFromUser(2);
