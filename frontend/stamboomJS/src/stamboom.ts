@@ -7,7 +7,7 @@ async function fetchPersonsForUser(id){
     return [];
 }
 
-function refreshFamilytree (id){
+function refreshFamilyTree (id){
     fetchPersonsForUser(id).then((personsFromData) => {
             if(personsFromData.length === 0){
                 console.log("Geen personen gevonden");
@@ -27,7 +27,7 @@ function refreshFamilytree (id){
         }
     );
 };
-refreshFamilytree(1);
+refreshFamilyTree(1);
 function allOfTheFamily(persons) {
     let result = '';
     persons.forEach(person => result += personCard(person))
@@ -51,7 +51,15 @@ function personCard(person) {
 };
 
 class Persoon {
-    constructor(id: string, f_name, l_name, gender, birthday, user_id, deathday){
+    private id: number;
+    private f_name: string;
+    private l_name: string;
+    private gender: string;
+    private birthday: string;
+    private user_id: number;
+    private deathday: string;
+    private persons = allOfTheFamily(1);
+    constructor(id: number, f_name: string, l_name: string, gender: string, birthday: string, user_id: number, deathday: string){
         this.id = id
         this.f_name = f_name
         this.l_name = l_name
@@ -94,12 +102,7 @@ class Persoon {
         return this.deathday !== null
     }
     numberOfPersons(){
-        let persons = refreshFamilytree(1);
-        return persons.length;
-    }
-
-    sortOnBirthday(){
-        return this.personen.sort((jong, oud) => jong.birthday - oud.birthday)
+        return this.persons.length;
     }
 
 };
@@ -135,7 +138,7 @@ function messageNewPersonCreated(persoon) {
 
 
 function showPassword() {
-    let password = document.getElementById("password");
+    let password = document.getElementById("password") as HTMLInputElement | null;
     if (password.type === "password") {
         password.type = "text";
     } else {
