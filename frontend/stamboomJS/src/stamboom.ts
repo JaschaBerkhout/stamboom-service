@@ -1,9 +1,9 @@
 async function fetchPersonsForUser(id){
- let response = await fetch('http://localhost:8000/?type=personen_json&user_id=' + id)
-  if(response.ok){
-    return await response.json();
-  }
-  alert("HTTP-Error: " + response.status);
+    let response = await fetch('http://localhost:8000/?type=personen_json&user_id=' + id)
+    if(response.ok){
+        return await response.json();
+    }
+    alert("HTTP-Error: " + response.status);
     return [];
 }
 
@@ -51,7 +51,7 @@ function personCard(person) {
 };
 
 class Persoon {
-    constructor(id, f_name, l_name, gender, birthday, user_id, deathday){
+    constructor(id: string, f_name, l_name, gender, birthday, user_id, deathday){
         this.id = id
         this.f_name = f_name
         this.l_name = l_name
