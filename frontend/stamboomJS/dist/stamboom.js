@@ -108,6 +108,11 @@ var Persoon = /** @class */ (function () {
     Persoon.prototype.name = function () {
         return this.f_name + ' ' + this.l_name;
     };
+    /**
+     * yolo
+     * @param startDatum
+     * @param eindDatum
+     */
     Persoon.prototype.getAge = function (startDatum, eindDatum) {
         var leeftijd = eindDatum.getFullYear() - startDatum.getFullYear();
         var maand = eindDatum.getMonth() - startDatum.getMonth();

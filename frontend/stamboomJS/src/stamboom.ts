@@ -16,7 +16,7 @@ function refreshFamilyTree (id){
             console.log(personsFromData);
             const persons = [];
             personsFromData.forEach(persoon => {
-                if(persoon === null) {
+                    if(persoon === null) {
                     return;
                 }
                 persons.push(
@@ -73,7 +73,12 @@ class Persoon {
         return this.f_name + ' ' + this.l_name
     }
 
-    getAge(startDatum, eindDatum){
+    /**
+     * yolo
+     * @param startDatum
+     * @param eindDatum
+     */
+    getAge(startDatum: Date, eindDatum: Date){
         let leeftijd = eindDatum.getFullYear() - startDatum.getFullYear();
         const maand = eindDatum.getMonth() - startDatum.getMonth();
         const dag = eindDatum.getDate() - startDatum.getDate()
