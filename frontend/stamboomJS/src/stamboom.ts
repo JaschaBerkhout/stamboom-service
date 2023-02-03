@@ -34,7 +34,7 @@ function allOfTheFamily(persons): string {
     return result;
 };
 
-function updateFamilyTreeOnWebpage(persons: string[]): void{
+function updateFamilyTreeOnWebpage(persons: IPersoon[]): void{
     const personenElement = document.getElementById('personen');
     personenElement.innerHTML = allOfTheFamily(persons);
 };
