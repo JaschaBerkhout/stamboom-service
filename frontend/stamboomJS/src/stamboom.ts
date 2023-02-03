@@ -34,23 +34,31 @@ function allOfTheFamily(persons): string {
     return result;
 };
 
-function updateFamilyTreeOnWebpage(persons): void{
+function updateFamilyTreeOnWebpage(persons: string[]): void{
     const personenElement = document.getElementById('personen');
     personenElement.innerHTML = allOfTheFamily(persons);
 };
 
-function personCard(person) {
-    return "<div class='"+ (person.gender === 'm' ? 'man' : 'vrouw')+ " persoon'>"+person.name() +
+function personCard(person: IPersoon) {
+    return "<div class='"+ person.getGender() + " persoon'>"+person.name() +
         ' <br> '+ person.getAgeOfPerson()+
         ' jaar' +
         ' <br>* ' +
-        person.niceDateFormat(person.birthday) +
+        person.getBirthday() +
         ' <br>' +
-        (person.isPassedAway() ? '✝ ' + person.niceDateFormat(person.deathday) : '') +
+        (person.isPassedAway() ? '✝ ' + person.getDeathday() : '') +
         '</div>';
 };
 
-class Persoon {
+interface IPersoon {
+    name:() => string;
+    getBirthday: () => string;
+    getDeathday: () => string;
+    getGender:() => string;
+    isPassedAway:() => boolean;
+    getAgeOfPerson:() => number;
+}
+class Persoon implements IPersoon {
     private id: number;
     private f_name: string;
     private l_name: string;
@@ -94,11 +102,22 @@ class Persoon {
         return this.getAge(geboortedatum,overlijdensdatum);
     }
 
-    niceDateFormat(datum: string): string {
+    private niceDateFormat(datum: string): string {
         return new Date(datum).toLocaleDateString('nl-nl');
     }
 
-    isPassedAway(): boolean{
+    public getBirthday(): string{
+        return this.niceDateFormat(this.birthday);
+    }
+    public getDeathday(): string {
+        return this.niceDateFormat(this.deathday);
+    }
+
+    public getGender(): string{
+        return this.gender === 'm' ? 'man' : 'vrouw';
+    }
+
+    public isPassedAway(): boolean{
         return this.deathday !== null
     }
     numberOfPersons(): number{
