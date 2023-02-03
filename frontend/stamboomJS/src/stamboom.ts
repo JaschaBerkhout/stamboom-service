@@ -28,13 +28,13 @@ function refreshFamilyTree (id: number){
     );
 };
 refreshFamilyTree(1);
-function allOfTheFamily(persons) {
+function allOfTheFamily(persons): string {
     let result = '';
     persons.forEach(person => result += personCard(person))
     return result;
 };
 
-function updateFamilyTreeOnWebpage(persons){
+function updateFamilyTreeOnWebpage(persons): void{
     const personenElement = document.getElementById('personen');
     personenElement.innerHTML = allOfTheFamily(persons);
 };
@@ -69,7 +69,7 @@ class Persoon {
         this.deathday = deathday
     }
 
-    name(){
+    name(): string{
         return this.f_name + ' ' + this.l_name
     }
 
@@ -94,14 +94,14 @@ class Persoon {
         return this.getAge(geboortedatum,overlijdensdatum);
     }
 
-    niceDateFormat(datum) {
+    niceDateFormat(datum: string): string {
         return new Date(datum).toLocaleDateString('nl-nl');
     }
 
-    isPassedAway(){
+    isPassedAway(): boolean{
         return this.deathday !== null
     }
-    numberOfPersons(){
+    numberOfPersons(): number{
         return this.persons.length;
     }
 
