@@ -1,4 +1,4 @@
-async function fetchPersonsForUser(id){
+async function fetchPersonsForUser(id: number){
     let response = await fetch('http://localhost:8000/?type=personen_json&user_id=' + id)
     if(response.ok){
         return await response.json();
@@ -7,7 +7,7 @@ async function fetchPersonsForUser(id){
     return [];
 }
 
-function refreshFamilyTree (id){
+function refreshFamilyTree (id: number){
     fetchPersonsForUser(id).then((personsFromData) => {
             if(personsFromData.length === 0){
                 console.log("Geen personen gevonden");
@@ -73,12 +73,7 @@ class Persoon {
         return this.f_name + ' ' + this.l_name
     }
 
-    /**
-     * yolo
-     * @param startDatum
-     * @param eindDatum
-     */
-    getAge(startDatum: Date, eindDatum: Date){
+    getAge(startDatum: Date, eindDatum: Date): number{
         let leeftijd = eindDatum.getFullYear() - startDatum.getFullYear();
         const maand = eindDatum.getMonth() - startDatum.getMonth();
         const dag = eindDatum.getDate() - startDatum.getDate()
@@ -88,7 +83,7 @@ class Persoon {
         return leeftijd
     }
 
-    getAgeOfPerson(){
+    getAgeOfPerson(): number{
         const geboortedatum = new Date(this.birthday);
 
         if (!this.isPassedAway()){
