@@ -7,7 +7,7 @@ async function fetchPersonsForUser(id: number){
     return [];
 }
 
-function refreshFamilyTree (id: number){
+function refreshFamilyTree (id: number): void{
     fetchPersonsForUser(id).then((personsFromData) => {
             if(personsFromData.length === 0){
                 console.log("Geen personen gevonden");
@@ -28,7 +28,7 @@ function refreshFamilyTree (id: number){
     );
 };
 refreshFamilyTree(1);
-function allOfTheFamily(persons): string {
+function allOfTheFamily(persons: IPersoon[]): string {
     let result = '';
     persons.forEach(person => result += personCard(person))
     return result;
@@ -39,7 +39,7 @@ function updateFamilyTreeOnWebpage(persons: IPersoon[]): void{
     personenElement.innerHTML = allOfTheFamily(persons);
 };
 
-function personCard(person: IPersoon) {
+function personCard(person: IPersoon): string {
     return "<div class='"+ person.getGender() + " persoon'>"+person.name() +
         ' <br> '+ person.getAgeOfPerson()+
         ' jaar' +
@@ -66,7 +66,6 @@ class Persoon implements IPersoon {
     private birthday: string;
     private user_id: number;
     private deathday: string;
-    private persons = allOfTheFamily(1);
     constructor(id: number, f_name: string, l_name: string, gender: string, birthday: string, user_id: number, deathday: string){
         this.id = id
         this.f_name = f_name
@@ -118,13 +117,13 @@ class Persoon implements IPersoon {
     }
 
     public isPassedAway(): boolean{
-        return this.deathday !== null
+        return this.deathday !== null;
     }
     numberOfPersons(): number{
-        return this.persons.length;
+
     }
 
-};
+}
 
 function updateSummary(numberOfPersons) {
     const samenvatting = document.getElementById('samenvatting')
@@ -154,6 +153,19 @@ function removeMessage(){
 function messageNewPersonCreated(persoon) {
     generalMessage(`${persoon.f_name} is toegevoegd aan de familie ${persoon.l_name}.`);
 };
+
+
+function login(){
+    const url = 'http://localhost:8000/?type=user_login';
+
+    fetch(url, { method: 'GET' })
+        .then(Result => Result.json())
+        .then(string => {
+            console.log(string);
+            console.log(`Login successful:  ${string.result}`);
+        })
+        .catch(errorMsg => { console.log(errorMsg); });
+}
 
 
 function showPassword() {

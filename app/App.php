@@ -3,7 +3,7 @@ namespace App;
 
 if (session_status() === PHP_SESSION_NONE)
 {
-    session_start();  // hier of daar?
+    session_start();
 }
 class App {
     private PersonsDatabase $db;
