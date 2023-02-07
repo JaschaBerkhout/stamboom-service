@@ -33,13 +33,16 @@ class App {
             $this->handleInsertUser();
         } elseif ($type === "user_login") {
             $this->handleUserLogin();
+        } elseif ($type === "user_logout") {
+            $this->logOut();
         } else {
             exit("Je hebt geen geldig type ingevuld jochie!");
         }
     }
 
-    public function logOut(): void{
-        unset($_SESSION);
+    public function logOut(): void
+    {
+        session_destroy();
     }
 
     public function getUserIdFromSession(): int
@@ -70,7 +73,7 @@ class App {
     {
         $this->requireLogin();
         if (empty($this->getUserIdFromSession()) || !is_numeric($this->getUserIdFromSession())) {
-            $this->displayResponseAndExit(false, null, "LEEG zoals je toekomst");
+            $this->displayResponseAndExit(false, 403, 'Niet ingelogd');
 
         }
 
@@ -79,13 +82,13 @@ class App {
         if ($id !== false) {
             $person = $this->db->getPersonById($id, $this->getUserIdFromSession());
 
-            if ($person !== FALSE) {
+            if ($person !== false) {
                 echo $this->convertToJson(['result' => true, 'data' => $person]);
                 return;
             }
         }
 
-        $this->displayResponseAndExit(false, null, 'Kon persoon niet toevoegen');
+        $this->displayResponseAndExit(false, 403, 'Kon persoon niet toevoegen');
     }
 
     private function handleUserLogin(): void
@@ -94,39 +97,42 @@ class App {
 
         if ($id === false) {
 
-            $this->displayResponseAndExit(false, null, 'Geen user gevonden met deze gegevens');
+            $this->displayResponseAndExit(false, 401, 'Geen user gevonden met deze gegevens');
         }
 
         $_SESSION['user_id'] = $id;
         $_SESSION['logged_in'] = true;
 
-        $this->displayResponseAndExit(true, $id, 'Log in gelukt');
+        $this->displayResponseAndExit(true, 200, 'Login gelukt');
 
     }
 
 
-    private function handleInsertUser(): void //?
+    private function handleInsertUser(): void
     {
         if (empty($_POST['email']) || empty($_POST['password'])) {
-            $this->displayResponseAndExit(false, null, 'Geen email of password meegegeven');
+            $this->displayResponseAndExit(false, 401, 'Geen email of password meegegeven');
         }
 
         if ($this->db->insertUser($_POST)) {
             $id = $this->db->getUserIdBasedOnEmail($_POST['email']);
-            if ($id !== FALSE) {
-                $this->displayResponseAndExit(true, $id);
+            if ($id !== false) {
+                $this->displayResponseAndExit(true, 200,'Login gelukt');
             }
         }
-        $this->displayResponseAndExit(false, null, 'Kon user niet toevoegen');
+        $this->displayResponseAndExit(false, 403);
     }
 
-    public function displayResponseAndExit(bool $result = false, int $user_id = null, string $message = 'Fout bij verwerken request'): array
+    public function displayResponseAndExit(bool $result = false, int $http_code = null, string $message = 'Fout bij verwerken request'): array
     {
+        if($http_code!==null) {
+            header(?,http_response_code($http_code));
+        }
 
         echo $this->convertToJson([
             'result' => $result,
-            'user_id' => $user_id,
-            'message' => $message
+            'user_id' => $_SESSION['user_id'] ?? null,
+            'error' => $message,
         ]);
 
         exit;
@@ -156,8 +162,9 @@ class App {
     public function requireLogin(): void
     {
         if (!$this->isLoggedIn()) {
-            exit("Niet ingelogd");
+                $this->displayResponseAndExit(false,403,'Niet ingelogd');
         }
+        $this->displayResponseAndExit(true,200,'Ingelogd');
     }
 
 }
