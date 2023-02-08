@@ -49,6 +49,7 @@ class App {
     {
         $this->requireLogin();
         return $_SESSION['user_id'];
+
     }
 
 
@@ -103,10 +104,9 @@ class App {
         $_SESSION['user_id'] = $id;
         $_SESSION['logged_in'] = true;
 
-        $this->displayResponseAndExit(true, 200, 'Login gelukt');
+        $this->displayResponseAndExit(true, 200, 'Ingelogd');
 
     }
-
 
     private function handleInsertUser(): void
     {
@@ -117,25 +117,29 @@ class App {
         if ($this->db->insertUser($_POST)) {
             $id = $this->db->getUserIdBasedOnEmail($_POST['email']);
             if ($id !== false) {
-                $this->displayResponseAndExit(true, 200,'Login gelukt');
+                $this->displayResponseAndExit(true, 200,'Ingelogd');
             }
         }
         $this->displayResponseAndExit(false, 403);
     }
 
-    public function displayResponseAndExit(bool $result = false, int $http_code = null, string $message = 'Fout bij verwerken request'): array
+    public function displayResponseAndExit(bool $result = false, int $http_code = null, string $message = 'Fout bij verwerken request'): void
+    {
+        $this->displayResponse($result,$http_code,$message);
+        exit;
+    }
+    public function displayResponse(bool $result = false, int $http_code = null, string $message = 'Fout bij verwerken request'): void
     {
         if($http_code!==null) {
-            header(?,http_response_code($http_code));
+            http_response_code($http_code);
         }
 
         echo $this->convertToJson([
             'result' => $result,
             'user_id' => $_SESSION['user_id'] ?? null,
-            'error' => $message,
+            'message' => $message,
         ]);
 
-        exit;
     }
 
     public function convertToJson(mixed $data): false|string
@@ -145,16 +149,15 @@ class App {
 
     public function displayPersonsFromUser(): void//twijfel?
     {
-        $this->requireLogin();
         $persons = $this->db->getPersonsPerUser($this->getUserIdFromSession());
         echo "<br>";
-        echo "Displaying persons from user ". $this->getUserIdFromSession();
+        echo "Displaying persons from user ". $_SESSION['user_id'];
         $this->presenter->displayPersons($persons);
     }
 
     public function displayPersonsFromUserJson(): void
     {
-        $this->requireLogin();
+
         $persons = $this->db->getPersonsPerUser($this->getUserIdFromSession());
         echo $this->convertToJson($persons);
     }
@@ -164,7 +167,8 @@ class App {
         if (!$this->isLoggedIn()) {
                 $this->displayResponseAndExit(false,403,'Niet ingelogd');
         }
-        $this->displayResponseAndExit(true,200,'Ingelogd');
+        $this->displayResponse(true,200,'Ingelogd');
+
     }
 
 }

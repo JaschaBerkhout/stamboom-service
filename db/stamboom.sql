@@ -33,7 +33,7 @@ CREATE TABLE relations(
 
 
 INSERT INTO persons (f_name,l_name,gender,birthday,user_id)
-    values ('Jascha','Berkhout','f','16-02-1995',1);
+    values ('Lekkers','Teston','f','01-02-2023',2);
 
 INSERT INTO relations_types(relation_type)
     VALUES ('Married'),('Parent'),('Relationship');
